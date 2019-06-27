@@ -9,6 +9,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+
+import org.hibernate.validator.constraints.Length;
+
 import java.time.Instant;
 import java.util.Set;
 

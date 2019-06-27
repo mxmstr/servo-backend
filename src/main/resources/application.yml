@@ -1,14 +1,28 @@
 spring:
   profiles:
     active: spring.profiles.active
+  user:
+    oauth:
+      token: 00IAqkAMGmNeCHH99L8jvnWA2-8Ca5SxLqzyf8rQln
+      orgUrl: https://dev-486832.okta.com/
   security:
     oauth2:
       client:
         registration:
           okta:
             client-id: 0oap0ze7tuZcw1B5Z356
-            client-secret: w7xS_fXEApsl3UfpK6gAiZHzMc8lQsgY_ISP1RvW
+            client-secret: 9nGCV0VCsqTctnocYNiFMAdBab-rNF91Y88aX3se
             scope: openid, email, profile
         provider:
           okta:
             issuer-uri: https://dev-486832.okta.com/oauth2/default
+  jpa:
+    database: MYSQL
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+  datasource:
+    platform: mysql
+    url: jdbc:mysql://localhost:3306/servo?allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=utf8
+    username: root
+    password: 

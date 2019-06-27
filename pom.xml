@@ -27,6 +27,10 @@
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 		<dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
@@ -66,6 +70,30 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-oauth2-jose</artifactId>
         </dependency>
+        
+        <dependency>
+		    <groupId>com.okta.spring</groupId>
+		    <artifactId>okta-spring-boot-starter</artifactId>
+		    <version>1.2.1</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>com.okta.sdk</groupId>
+		    <artifactId>okta-sdk-api</artifactId>
+		    <version>1.5.2</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.okta.sdk</groupId>
+		    <artifactId>okta-sdk-impl</artifactId>
+		    <version>1.5.2</version>
+		    <scope>runtime</scope>
+		</dependency>
+		<dependency>
+		    <groupId>com.okta.sdk</groupId>
+		    <artifactId>okta-sdk-httpclient</artifactId>
+		    <version>1.5.2</version>
+		    <scope>runtime</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
