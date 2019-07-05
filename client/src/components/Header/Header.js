@@ -29,12 +29,6 @@ class Header extends React.Component {
             <div className="collapse navbar-collapse" id="navbarResponsive">
                 <ul className="navbar-nav ml-auto">
                     <li className="nav-item">
-                        <Link className="nav-link" to="/">Home</Link>
-                    </li>
-                    <li className = "nav-item" >
-                        <Link className = "nav-link" to="/profile" > Profile </Link>
-                    </li>
-                    <li className="nav-item">
                         {/*<Link className="nav-link" onClick={this.props.auth.logout}>Logout</Link>*/}
                         <a className="nav-link" href="javascript:void(0)" onClick={this.props.auth.logout}>Logout</a>
                     </li>
@@ -45,15 +39,8 @@ class Header extends React.Component {
     let navNotAuth = (
         <div className="collapse navbar-collapse" id="navbarResponsive">
             <ul className="navbar-nav ml-auto">
-                <li className="nav-item">
-                    <Link className="nav-link" to="/">Home</Link>
-                </li>
-                <li className="nav-item">
-                    {/*<Link className="nav-link" onClick={this.props.auth.login}>Login</Link>*/}
-                    <a className="nav-link" href="javascript:void(0)" onClick={this.props.auth.login}>Login</a>
-                </li>
                 <li className = "nav-item" >
-                    <Link className = "nav-link" to="/register" > Register </Link>
+                    <Link className = "nav-link" to="/register" >Register</Link>
                 </li >
             </ul>
         </div>

@@ -20,10 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.okta.sdk.authc.credentials.TokenClientCredentials;
 import com.okta.sdk.client.Client;
 import com.okta.sdk.client.Clients;
+import com.okta.sdk.resource.ResourceException;
 import com.okta.sdk.resource.user.UserBuilder;
 import com.platform.lynch.servo.model.Group;
 import com.platform.lynch.servo.model.GroupRepository;
-import com.platform.lynch.servo.model.User;
+import com.platform.lynch.servo.model.Business;
 import com.platform.lynch.servo.model.UserRepository;
 
 import lombok.Value;
@@ -68,7 +69,7 @@ public class UserController {
     }
     
     @PostMapping("/user")
-    ResponseEntity<?> createUser(@Valid @RequestBody User user) throws URISyntaxException {
+    ResponseEntity<?> createUser(@Valid @RequestBody Business user) throws URISyntaxException {
     	
         log.info("Request to create user: {}", user);
         
@@ -80,29 +81,16 @@ public class UserController {
         try {
         	UserBuilder.instance()
 	        	.setEmail(user.getEmail())
-	        	.setFirstName(user.getOrganization())
+	        	.setFirstName(user.getName())
 	        	.setPassword(user.getPassword().toCharArray())
 	        	.setActive(true)
 	        	.buildAndCreate(client);
         	return ResponseEntity.ok().build();
         }
-        catch(com.okta.sdk.resource.ResourceException e) {
+        catch(ResourceException e) {
         	return ResponseEntity.badRequest().build();
         }
         
-//        String userEmail = user.getEmail();
-// 
-//        // check to see if user already exists
-//        Optional<User> oldUser = userRepository.findByEmail(userEmail);
-//        User result;
-//        
-//        if (oldUser.isPresent()) {
-//        	return ResponseEntity.ok().build();
-//        }
-//        else {
-//        	//result = userRepository.save(user);
-//	        return ResponseEntity.ok().build();
-//        }
     }
 
     @PostMapping("/logout")

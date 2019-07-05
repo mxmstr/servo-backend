@@ -11,6 +11,6 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
     List<Group> findAllByName(String name);
     Group findByAddress(String address);
     
-    List<Group> findAllByUserId(String id);
+    //List<Group> findAllByUserId(String id);
     
 }

@@ -6,16 +6,20 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class User {
+public class ServoTable {
 
     @Id
     private String id;
-    private String organization;
-    private String email;
-    private String password;
+    @ManyToOne
+    private Business business;
+    @ManyToOne
+    private Customer customer;
+    
 }

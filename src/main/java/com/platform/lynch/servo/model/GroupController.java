@@ -33,7 +33,7 @@ class GroupController {
 
     @GetMapping("/groups")
     Collection<Group> groups(Principal principal) {
-        return groupRepository.findAllByUserId(principal.getName());
+        return null;//groupRepository.findAllByUserId(principal.getName());
     }
 
     @GetMapping("/group/{id}")
@@ -49,19 +49,21 @@ class GroupController {
         log.info("Request to create group: {}", group);
         Map<String, Object> details = principal.getAttributes();
         String userId = details.get("sub").toString();
- 
-        // check to see if user already exists
-        Optional<User> user = userRepository.findById(userId);
-        group.setUser(user.orElse(
-        		new User(userId,
-        				details.get("organization").toString(),
-        				details.get("email").toString(), 
-        				""
-        				)));
+// 
+//        // check to see if user already exists
+//        Optional<Business> user = userRepository.findById(userId);
+//        group.setUser(user.orElse(
+//        		new Business(userId,
+//        				details.get("organization").toString(),
+//        				details.get("email").toString(), 
+//        				"", userId, null, null
+//        				)));
+//
+//        Group result = groupRepository.save(group);
+//        return ResponseEntity.created(new URI("/api/group/" + result.getId()))
+//                .body(result);
 
-        Group result = groupRepository.save(group);
-        return ResponseEntity.created(new URI("/api/group/" + result.getId()))
-                .body(result);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/group/{id}")

@@ -19,7 +19,7 @@ export const loginApiCall = (oktaAuth, username, password) => {
             password: password
         }).then(res => {
             console.log(JSON.stringify(res));
-            alert(res);
+            //alert(res);
             dispatch(loginSuccess(res.sessionToken))
         }).catch(err => {
             console.log(err.message + '\n error', err);
