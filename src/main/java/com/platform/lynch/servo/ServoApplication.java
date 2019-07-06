@@ -34,6 +34,8 @@ public class ServoApplication {
 	            .authorizeRequests()
 	                .antMatchers("/**/*.{js,html,css}").permitAll()
 	                .antMatchers("/", "/api/user").permitAll()
+	                .antMatchers("/", "/api/menu").permitAll()
+	                .antMatchers("/", "/api/menu/{id}").permitAll()
 	                .anyRequest().authenticated();
 //            http
 //                .authorizeRequests().anyRequest().authenticated()

@@ -24,6 +24,7 @@ import com.okta.sdk.resource.ResourceException;
 import com.okta.sdk.resource.user.UserBuilder;
 import com.platform.lynch.servo.model.Group;
 import com.platform.lynch.servo.model.GroupRepository;
+import com.platform.lynch.servo.model.User;
 import com.platform.lynch.servo.model.Business;
 import com.platform.lynch.servo.model.UserRepository;
 
@@ -61,6 +62,9 @@ public class UserController {
 
     @GetMapping("/user")
     public ResponseEntity<?> getUser(@AuthenticationPrincipal OAuth2User user) {
+    	
+    	log.info("Request to get users: {}", user);
+    	
         if (user == null) {
             return new ResponseEntity<>("", HttpStatus.OK);
         } else {
@@ -69,7 +73,7 @@ public class UserController {
     }
     
     @PostMapping("/user")
-    ResponseEntity<?> createUser(@Valid @RequestBody Business user) throws URISyntaxException {
+    ResponseEntity<?> createUser(@Valid @RequestBody User user) throws URISyntaxException {
     	
         log.info("Request to create user: {}", user);
         

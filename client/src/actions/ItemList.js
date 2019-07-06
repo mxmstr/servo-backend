@@ -1,24 +1,29 @@
 import axios from "axios/index";
 
 
-export const fetchItemList = (data) => {
+export const updateItemList = (data) => ({
+    type: 'UPDATE',
+    payload: data
+});
+
+export const fetchItemsApiCall = (data) => {
     return dispatch => {
 
-    	fetch('api/menuitems/', {credentials: 'include'})
-	      .then(response => response.json())
-	      .then(data => this.setState({groups: data}))
-	      .catch(() => this.props.history.push('/'));
-    	
-    	return axios({
-            method: 'get',
-            url: '/api/menuitems',
-            data: data,
-            config: {
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                }
-            }
-    	})
+    	return fetch(`/api/${data.uri}/${data.user.sub}`, {
+    	      method: 'GET',
+    	      headers: {
+    	        'Accept': 'application/json',
+    	        'Content-Type': 'application/json'
+    	      },
+    	      credentials: 'include'
+    	    })
+    	.then(response => response.json())
+	      .then(data => {
+	    	  //console.log(data);
+	    	  dispatch(updateItemList(data));
+	      })
+	      .catch(err => {
+	            console.log(err.message);
+	        });
     };
 };

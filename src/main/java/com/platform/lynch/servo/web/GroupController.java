@@ -1,7 +1,9 @@
-package com.platform.lynch.servo.model;
+package com.platform.lynch.servo.web;
 
 import com.platform.lynch.servo.model.Group;
 import com.platform.lynch.servo.model.GroupRepository;
+import com.platform.lynch.servo.model.UserRepository;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

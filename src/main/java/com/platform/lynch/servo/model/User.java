@@ -12,14 +12,13 @@ import javax.persistence.Lob;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Business {
+public class User {
 
     @Id
     private String id;
     private String name;
     private String address;
-    private Boolean isOpened;
-    @Lob
-    private byte[] images;
+    private String email;
+    private String password;
     
 }

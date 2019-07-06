@@ -2,14 +2,14 @@ import React from 'react';
 import { Button, ButtonGroup, Container, Table } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { withAuth } from '@okta/okta-react';
-import {fetchItemList} from "../../../actions/ItemList";
+import {fetchItemsApiCall} from "../../../actions/ItemList";
 import {connect} from "react-redux";
 import axios from "axios/index";
 
 class ItemList extends React.Component {
     constructor(props){
         super(props);
-        this.state = { user: null, data: [] };
+        this.state = { user: null, items: [] };
         this.getCurrentUser = this.getCurrentUser.bind(this);
     }
 
@@ -17,83 +17,48 @@ class ItemList extends React.Component {
         await this.props.auth.getUser()
         	.then(user => {
         		this.setState({user});
-        		console.log(user);
-        	}
-        	);
-//            .then(() => {
-//            	
-//            	console.log(this.state.user);
-////            	
-////            	axios({
-////                    method: 'get',
-////                    url: this.props.uri,
-////                    config: {
-////                        headers: {
-////                        	'X-XSRF-TOKEN': user.sub,
-////                            'Accept': 'application/json',
-////                            'Content-Type': 'application/json'
-////                        },
-////                    },
-////                    withCredentials: true
-////                })
-////                    .then(json => {
-////                        console.log(json);
-////                    })
-////                    .catch(err => {
-////                        console.log(err);
-////                    });
-//            	
-////	            fetch(this.props.uri, {
-////	    	      method: 'GET',
-////	    	      headers: {
-////	    	        'X-XSRF-TOKEN': user.sub,
-////	    	        'Accept': 'application/json',
-////	    	        'Content-Type': 'application/json'
-////	    	      },
-////	    	      credentials: 'include'
-////	              })
-////	              .then(response => response.json())
-////	              .then(response => 
-////	              		{console.log(response)
-////	              })
-////	              .catch(err => {
-////	                  console.log(err);
-////	              });
-//            	
-//            });
+        		
+        		var data = {user: user, uri: this.props.uri};
+		        this.props.fetchItemsApiCall(data);
+        	});
+        	
     }
 
     componentDidMount() {
         this.getCurrentUser();
         
-        //console.log(this.state.user);
-        
-//        await fetch(this.props.uri, {
-//  	      method: 'GET',
-//  	      headers: {
-//  	        'X-XSRF-TOKEN': this.state.user.sub,
-//  	        'Accept': 'application/json',
-//  	        'Content-Type': 'application/json'
-//  	      },
-//  	      credentials: 'include'
-//        })
-//        .then(response => response.json())
-//        .catch(err => {
-//            console.log(err);
-//        });
-//  	    }).then(() => {
-//  	    	
-//  	        let updatedGroups = [...this.state.groups].filter(i => i.id !== id);
-//  	        this.setState({groups: updatedGroups});
-//  	      })
-        
     }
 
     render() {
     	
-    	if(!this.state.user) return null;
+    	if (!this.state.user) return null;
     	
-    	const {data} = this.state;
+    	if (this.props.items.length == 0) return null;
+    	
+    	const columns = Object.keys(Object.values(this.props.items)[0]);
+    	
+    	const head = columns.map(key => { 
+    		return <th>{key}</th>
+    	});
+    	
+    	const body = this.props.items.map(item => {
+    		
+    		const values = Object.values(item).map(value => {
+    			console.log(value);
+    	      			return <td style={{whiteSpace: 'nowrap'}}>{ JSON.stringify(value) }</td>
+    	      		});
+    		
+    	      return <tr key={item.id}>
+    	      	{values}
+    	        <td>
+	    	        <ButtonGroup>
+	    	          <Button size="sm" color="primary" tag={Link} to={`/${this.props.uri}/` + item.id}>Edit</Button>
+	    	          <Button size="sm" color="danger" onClick={() => this.remove(item.id)}>Delete</Button>
+	    	        </ButtonGroup>
+	    	      </td>
+	    	    </tr>
+    	    });
+    	
     	
         return (
         		<Container fluid>
@@ -104,14 +69,11 @@ class ItemList extends React.Component {
                 <Table className="mt-4">
                   <thead>
                   <tr>
-                    <th width="20%">Name</th>
-                    <th width="20%">Location</th>
-                    <th>Events</th>
-                    <th width="10%">Actions</th>
+                  {head}
                   </tr>
                   </thead>
                   <tbody>
-                  {data}
+                  {body}
                   </tbody>
                 </Table>
               </Container>
@@ -119,4 +81,19 @@ class ItemList extends React.Component {
     }
 };
 
-export default withAuth(ItemList);
+const mapStateToProps = (state) => {
+    return {
+        items: state.itemlist.items,
+    }
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchItemsApiCall: (data) => dispatch(fetchItemsApiCall(data))
+    }
+};
+
+export default connect(
+	mapStateToProps,
+    mapDispatchToProps
+)(withAuth(ItemList));

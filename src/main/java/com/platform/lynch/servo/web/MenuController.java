@@ -1,7 +1,10 @@
-package com.platform.lynch.servo.model;
+package com.platform.lynch.servo.web;
 
 import com.platform.lynch.servo.model.Group;
 import com.platform.lynch.servo.model.GroupRepository;
+import com.platform.lynch.servo.model.MenuItem;
+import com.platform.lynch.servo.model.MenuRepository;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -30,15 +33,15 @@ class MenuController {
     }
 
     @GetMapping("/menu")
-    Collection<MenuItem> menuitems(Principal principal) {
+    Collection<MenuItem> menuitems(@AuthenticationPrincipal OAuth2User user) {
+    	log.info("Request to get all menu items: {}", user.getName());
     	
-    	
-        return menuRepository.findAllByBusinessId(principal.getName());
+        return menuRepository.findAllByBusinessId(user.getName());
     }
 
     @GetMapping("/menu/{id}")
-    ResponseEntity<?> get(@PathVariable Long id) {
-    	return null;
+    Collection<MenuItem> get(@PathVariable String id) {
+    	return menuRepository.findAllByBusinessId(id);
     }
 
     @PostMapping("/menu")
