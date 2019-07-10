@@ -1,5 +1,8 @@
 package com.platform.lynch.servo;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,6 +16,9 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SimpleSavedRequest;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @SpringBootApplication
 public class ServoApplication {
@@ -26,16 +32,15 @@ public class ServoApplication {
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
+        	//.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+        	
         	http
 	            .oauth2Login().and()
 	            .csrf()
-	                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-	                .and()
+	            	.disable()
 	            .authorizeRequests()
 	                .antMatchers("/**/*.{js,html,css}").permitAll()
-	                .antMatchers("/", "/api/user").permitAll()
-	                .antMatchers("/", "/api/menu").permitAll()
-	                .antMatchers("/", "/api/menu/{id}").permitAll()
+	                .antMatchers("/", "/api/**").permitAll()
 	                .anyRequest().authenticated();
 //            http
 //                .authorizeRequests().anyRequest().authenticated()
@@ -56,6 +61,20 @@ public class ServoApplication {
 	            }
 	        }
 	    };
+	}
+	
+	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
+	    final CorsConfiguration configuration = new CorsConfiguration();
+	    configuration.setAllowedOrigins(Arrays.asList("*"));
+	    configuration.setAllowedMethods(Arrays.asList("HEAD",
+	            "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+	    configuration.setAllowCredentials(true);
+	    configuration.setAllowedHeaders(Arrays.asList("*"));
+	    configuration.setExposedHeaders(Arrays.asList("X-Auth-Token","Authorization","Access-Control-Allow-Origin","Access-Control-Allow-Credentials"));
+	    final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+	    source.registerCorsConfiguration("/**", configuration);
+	    return source;
 	}
 	
 }

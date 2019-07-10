@@ -29,4 +29,23 @@ public class MenuItem {
     @Lob
     private byte[] image;
     
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PublicMenuItem {
+
+        private byte[] image;
+        private Long id;
+        private String name;
+        private String price;
+        private String options;
+    	
+    }
+    
+    public PublicMenuItem getPublicEntity() {
+    	
+    	return new PublicMenuItem(image, id, name, price, options);
+    	
+    }
+    
 }

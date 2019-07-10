@@ -4,7 +4,7 @@ const initialState = {
 
 const itemlist = (state = initialState, action) => {
     switch (action.type) {
-        case 'UPDATE':
+        case 'UPDATE_ITEM_LIST':
             return Object.assign({}, state, {items: action.payload});
         default:
             return state;

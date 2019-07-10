@@ -1,106 +1,113 @@
 import React from 'react';
+import Popup from "reactjs-popup";
+import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
 import { withAuth } from '@okta/okta-react';
-import {fetchItemList} from "../../../actions/ItemList";
+import {fetchItemsApiCall} from "../../../actions/ItemList";
+import {clearItemApiCall, fetchItemApiCall, putItemApiCall} from "../../../actions/ItemEdit";
 import {connect} from "react-redux";
 
-class ItemList extends React.Component {
+class ItemEdit extends React.Component {
     constructor(props){
         super(props);
-        this.state = { 
-    		name: '',
-    		price: '',
-    		options: '',
-    		image: '',
-        };
-        this.getCurrentUser = this.getCurrentUser.bind(this);
+        this.state = { user: null, item: {} };
+        this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleOldPasswordChange = this.handleOldPasswordChange.bind(this);
-        this.handleNewPasswordChange = this.handleNewPasswordChange.bind(this);
+        this.clearItem = this.clearItem.bind(this);
     }
 
-    async getCurrentUser(){
-        this.props.auth.getUser()
-            .then(user => this.setState({user}));
+    async getCurrentUser() {
+        await this.props.auth.getUser()
+        	.then(user => {
+        		this.setState({user});
+        	});
+        	
     }
 
-    handleOldPasswordChange(e) {
-        this.setState({ oldPassword: e.target.value });
-    }
-    handleNewPasswordChange(e) {
-        this.setState({ newPassword: e.target.value });
+    clearItem() {
+        this.props.clearItemApiCall();
+        this.setState({item: {} });
     }
 
-    handleSubmit(e){
+    handleChange(event) {
+	    const target = event.target;
+	    const value = target.value;
+        const name = target.name;
+        this.state.item[name] = value;
+	  }
+
+    handleSubmit(e) {
         e.preventDefault();
 
-        var data = {
-            userId: this.state.user.sub, oldPassword: this.state.oldPassword, newPassword: this.state.newPassword
-        };
-        this.props.changePasswordApiCall(data);
+        const item = Object.assign(this.props.item, this.state.item);
+
+        this.props.putItemApiCall(
+            { uri: this.props.uri, user: this.state.user, item: item });
+        this.props.fetchItemsApiCall(
+            { uri: this.props.uri, user: this.state.user });
+        
+        this.clearItem();
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.getCurrentUser();
-        
-        fetch('api/menu', {credentials: 'include'})
-	      .then(response => response.json())
-	      .then(data => this.setState({groups: data, isLoading: false}))
-	      .catch(() => this.props.history.push('/'));
     }
 
     render() {
-        if(!this.state.user) return null;
-        const errorMessage = this.props.error ?
-            (<div className="alert alert-danger"><strong>Error! </strong>{this.props.error}</div>):
-            null;
-        const successMessage = this.props.success ?
-            (<div className="alert alert-success"><strong>Success! </strong>{this.props.success}</div>):
-            null;
+        if (!this.props.item) {
+            this.state.item = {};
+            return null;
+        }
 
+        const fields = Object.keys(this.props.item).map(key => {
+            return <FormGroup>
+                <Label for={key}>{key}</Label>
+                <Input type="text" name={key} id={key} defaultValue={this.props.item[key] || ''}
+                    onChange={this.handleChange} autoComplete={key} 
+                    disabled={!this.props.editable.includes(key)} />
+            </FormGroup>
+        });
 
         return (
-        		<Container>
+            <Container fluid>
                 <Form onSubmit={this.handleSubmit}>
-                  <FormGroup>
-                    <Label for="name">Name</Label>
-                    <Input type="text" name="name" id="name" value={item.name || ''}
-                           onChange={this.handleChange} autoComplete="name"/>
-                  </FormGroup>
-                  <FormGroup>
-                    <Label for="price">Price</Label>
-                    <Input type="text" name="price" id="price" value={item.price || ''}
-                           onChange={this.handleChange} autoComplete="price"/>
-                  </FormGroup>
-                  <FormGroup>
-                    <Label for="Options">Options</Label>
-                    <Input type="text" name="Options" id="Options" value={item.Options || ''}
-                           onChange={this.handleChange} autoComplete="Options"/>
-                  </FormGroup>
+                    {fields}
                   <FormGroup>
                     <Button color="primary" type="submit">Save</Button>{' '}
-                    <Button color="secondary" tag={Link} to="/">Cancel</Button>
+                    <Button color="secondary" onClick={this.clearItem}>Cancel</Button>
                   </FormGroup>
                 </Form>
-              </Container>
+            </Container>
         )
+        // return (
+        //     <Popup position="right center">
+        //         <Form onSubmit={this.handleSubmit}>
+        //             {fields}
+        //           <FormGroup>
+        //             <Button color="primary" type="submit">Save</Button>{' '}
+        //             <Button color="secondary" onClick={this.clearItem}>Cancel</Button>
+        //           </FormGroup>
+        //         </Form>
+        //     </Popup>
+        // )
     }
 };
 
-
 const mapStateToProps = (state) => {
     return {
-        error: state.profile.error,
-        success: state.profile.success
+        item: state.itemedit.item,
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        changePasswordApiCall: (data) => dispatch(changePasswordApiCall(data))
+        clearItemApiCall: (data) => dispatch(clearItemApiCall(data)),
+        fetchItemApiCall: (data) => dispatch(fetchItemApiCall(data)),
+        putItemApiCall: (data) => dispatch(putItemApiCall(data)),
+        fetchItemsApiCall: (data) => dispatch(fetchItemsApiCall(data))
     }
 };
 
 export default connect(
-    mapStateToProps,
+	mapStateToProps,
     mapDispatchToProps
-)(withAuth(ItemList));
+)(withAuth(ItemEdit));

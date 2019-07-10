@@ -2,16 +2,17 @@ import axios from "axios/index";
 
 
 export const updateItemList = (data) => ({
-    type: 'UPDATE',
+    type: 'UPDATE_ITEM_LIST',
     payload: data
 });
 
 export const fetchItemsApiCall = (data) => {
     return dispatch => {
-
-    	return fetch(`/api/${data.uri}/${data.user.sub}`, {
+		// data.user
+    	return fetch(`/api/${data.uri}`, {
     	      method: 'GET',
     	      headers: {
+				'UserId': data.user.sub,
     	        'Accept': 'application/json',
     	        'Content-Type': 'application/json'
     	      },
