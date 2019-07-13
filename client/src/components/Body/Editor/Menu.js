@@ -27,7 +27,10 @@ class Menu extends React.Component {
         return (
             <div className="d-flex flex-row">
         		<div className="p-2"><Sidebar /></div>
-        		<ItemList title="Menu Items" uri="menu" />
+                <ItemList 
+                    title="Menu Items" 
+                    uri="menu" 
+                    editable={ ['name', 'price', 'options'] } />
             </div>
         )
     }

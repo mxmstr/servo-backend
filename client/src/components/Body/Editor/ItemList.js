@@ -2,8 +2,8 @@ import React from 'react';
 import { Button, ButtonGroup, Container, Table } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { withAuth } from '@okta/okta-react';
-import {fetchItemsApiCall} from "../../../actions/ItemList";
-import {clearItemApiCall, fetchItemApiCall} from "../../../actions/ItemEdit";
+import {fetchItemsApiCall, deleteItemApiCall} from "../../../actions/ItemList";
+import {clearItemApiCall, addItemApiCall, fetchItemApiCall} from "../../../actions/ItemEdit";
 import {connect} from "react-redux";
 import ItemEdit from "./ItemEdit";
 
@@ -12,6 +12,7 @@ class ItemList extends React.Component {
         super(props);
         this.state = { user: null };
         this.getCurrentUser = this.getCurrentUser.bind(this);
+        this.addItem = this.addItem.bind(this);
         this.editItem = this.editItem.bind(this);
         this.removeItem = this.removeItem.bind(this);
     }
@@ -31,25 +32,26 @@ class ItemList extends React.Component {
         this.getCurrentUser();
     }
 
+    async addItem() {
+        await this.props.clearItemApiCall();
+
+        var data = {fields: this.props.editable};
+        this.props.addItemApiCall(data);
+    }
+
     async editItem(id) {
+        await this.props.clearItemApiCall();
+
         var data = {uri: this.props.uri, user: this.state.user, id: id};
-        this.props.clearItemApiCall();
         this.props.fetchItemApiCall(data);
     }
 
     async removeItem(id) {
-	    // await fetch(`/api/group/${id}`, {
-	    //   method: 'DELETE',
-	    //   headers: {
-	    //     'X-XSRF-TOKEN': this.state.csrfToken,
-	    //     'Accept': 'application/json',
-	    //     'Content-Type': 'application/json'
-	    //   },
-	    //   credentials: 'include'
-	    // }).then(() => {
-	    //     let updatedGroups = [...this.state.groups].filter(i => i.id !== id);
-	    //     this.setState({groups: updatedGroups});
-	    //   });
+      await this.props.clearItemApiCall();
+
+      var data = {uri: this.props.uri, user: this.state.user, id: id};
+      await this.props.deleteItemApiCall(data);
+      this.props.fetchItemsApiCall(data);
 	  }
 
     render() {
@@ -81,22 +83,26 @@ class ItemList extends React.Component {
     	
         return (
         		<Container fluid>
-              <ItemEdit uri={ this.props.uri } editable={ ['name', 'price', 'options'] } />
-                <div className="float-right">
-                  <Button color="success" tag={Link} to="/menu/new">Add Item</Button>
-                </div>
-                <h3>{ this.props.title }</h3>
-                <Table className="mt-4">
-                  <thead>
-                  <tr>
-                  {head}
-                  </tr>
-                  </thead>
-                  <tbody>
-                  {body}
-                  </tbody>
-                </Table>
-              </Container>
+
+              <ItemEdit uri={ this.props.uri } editable={ this.props.editable } />
+
+              <div className="float-right">
+                <Button color="success" onClick={ this.addItem }>Add Item</Button>
+              </div>
+
+              <h3>{ this.props.title }</h3>
+              <Table className="mt-4">
+                <thead>
+                <tr>
+                {head}
+                </tr>
+                </thead>
+                <tbody>
+                {body}
+                </tbody>
+              </Table>
+
+            </Container>
         )
     }
 };
@@ -110,6 +116,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
       clearItemApiCall: (data) => dispatch(clearItemApiCall(data)),
+      addItemApiCall: (data) => dispatch(addItemApiCall(data)),
+      deleteItemApiCall: (data) => dispatch(deleteItemApiCall(data)),
       fetchItemApiCall: (data) => dispatch(fetchItemApiCall(data)),
       fetchItemsApiCall: (data) => dispatch(fetchItemsApiCall(data))
     }

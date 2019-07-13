@@ -6,6 +6,28 @@ export const updateItemList = (data) => ({
     payload: data
 });
 
+export const deleteItemApiCall = (data) => {
+    return dispatch => {
+
+		return fetch(`/api/${data.uri}/${data.id}`, {
+				method: 'DELETE',
+				headers: {
+					'UserId': data.user.sub,
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				credentials: 'include'
+			})
+		.then(response => response.json())
+			.then(data => {
+				//console.log(data);
+			})
+			.catch(err => {
+				console.log(err.message);
+			});
+    };
+};
+
 export const fetchItemsApiCall = (data) => {
     return dispatch => {
 		// data.user

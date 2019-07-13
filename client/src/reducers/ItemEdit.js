@@ -1,13 +1,12 @@
 const initialState = {
-    item: null
+    item: null,
+    create: false
 };
 
 const itemedit = (state = initialState, action) => {
     switch (action.type) {
-        case 'CLEAR_ITEM':
-            return Object.assign({}, state, {item: action.payload});
         case 'UPDATE_ITEM':
-            return Object.assign({}, state, {item: action.payload});
+            return Object.assign({}, state, {...action.payload});
         default:
             return state;
     }

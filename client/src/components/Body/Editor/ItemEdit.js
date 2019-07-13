@@ -3,7 +3,7 @@ import Popup from "reactjs-popup";
 import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
 import { withAuth } from '@okta/okta-react';
 import {fetchItemsApiCall} from "../../../actions/ItemList";
-import {clearItemApiCall, fetchItemApiCall, putItemApiCall} from "../../../actions/ItemEdit";
+import {clearItemApiCall, fetchItemApiCall, putItemApiCall, postItemApiCall} from "../../../actions/ItemEdit";
 import {connect} from "react-redux";
 
 class ItemEdit extends React.Component {
@@ -12,7 +12,6 @@ class ItemEdit extends React.Component {
         this.state = { user: null, item: {} };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.clearItem = this.clearItem.bind(this);
     }
 
     async getCurrentUser() {
@@ -20,12 +19,6 @@ class ItemEdit extends React.Component {
         	.then(user => {
         		this.setState({user});
         	});
-        	
-    }
-
-    clearItem() {
-        this.props.clearItemApiCall();
-        this.setState({item: {} });
     }
 
     handleChange(event) {
@@ -35,17 +28,14 @@ class ItemEdit extends React.Component {
         this.state.item[name] = value;
 	  }
 
-    handleSubmit(e) {
+    async handleSubmit(e) {
         e.preventDefault();
 
-        const item = Object.assign(this.props.item, this.state.item);
+        const item = this.props.create ? this.state.item : Object.assign(this.props.item, this.state.item);
+        var data = { uri: this.props.uri, user: this.state.user, item: item };
 
-        this.props.putItemApiCall(
-            { uri: this.props.uri, user: this.state.user, item: item });
-        this.props.fetchItemsApiCall(
-            { uri: this.props.uri, user: this.state.user });
-        
-        this.clearItem();
+        this.props.create ? await this.props.postItemApiCall(data) : await this.props.putItemApiCall(data);
+        this.props.fetchItemsApiCall(data);
     }
 
     componentDidMount() {
@@ -58,24 +48,46 @@ class ItemEdit extends React.Component {
             return null;
         }
 
+        const title = <h2>{ this.props.create ? 'Add New Item' : 'Edit Item' }</h2>;
+
         const fields = Object.keys(this.props.item).map(key => {
-            return <FormGroup>
-                <Label for={key}>{key}</Label>
-                <Input type="text" name={key} id={key} defaultValue={this.props.item[key] || ''}
-                    onChange={this.handleChange} autoComplete={key} 
-                    disabled={!this.props.editable.includes(key)} />
-            </FormGroup>
-        });
+                return <FormGroup>
+                    <Label for={ key }>{ key }</Label>
+                    <Input type="text" name={ key } id={ key } defaultValue={ this.props.item[key] || '' }
+                        onChange={ this.handleChange } autoComplete={ key } 
+                        disabled={ !this.props.editable.includes(key) } />
+                </FormGroup>
+            });
+        // const fields = this.props.create ? 
+        //     Object.values(this.props.editable).map(value => {
+        //         return <FormGroup>
+        //             <Label for={ value } >{ value }</Label>
+        //             <Input type="text" name={ value } id={ value }
+        //                 onChange={ this.handleChange } autoComplete={ value } />
+        //         </FormGroup>
+        //     }) : 
+        //     Object.keys(this.props.item).map(key => {
+        //         return <FormGroup>
+        //             <Label for={ key }>{ key }</Label>
+        //             <Input type="text" name={ key } id={ key } defaultValue={ this.props.item[key] || '' }
+        //                 onChange={ this.handleChange } autoComplete={ key } 
+        //                 disabled={ !this.props.editable.includes(key) } />
+        //         </FormGroup>
+        //     });
 
         return (
             <Container fluid>
-                <Form onSubmit={this.handleSubmit}>
-                    {fields}
+
+                { title }
+
+                <Form onSubmit={ this.handleSubmit }>
+                    { fields }
                   <FormGroup>
                     <Button color="primary" type="submit">Save</Button>{' '}
-                    <Button color="secondary" onClick={this.clearItem}>Cancel</Button>
+                    <Button color="secondary" onClick={ this.props.clearItemApiCall }>Cancel</Button>
                   </FormGroup>
                 </Form>
+
             </Container>
         )
         // return (
@@ -95,6 +107,7 @@ class ItemEdit extends React.Component {
 const mapStateToProps = (state) => {
     return {
         item: state.itemedit.item,
+        create: state.itemedit.create,
     }
 };
 
@@ -103,6 +116,7 @@ const mapDispatchToProps = (dispatch) => {
         clearItemApiCall: (data) => dispatch(clearItemApiCall(data)),
         fetchItemApiCall: (data) => dispatch(fetchItemApiCall(data)),
         putItemApiCall: (data) => dispatch(putItemApiCall(data)),
+        postItemApiCall: (data) => dispatch(postItemApiCall(data)),
         fetchItemsApiCall: (data) => dispatch(fetchItemsApiCall(data))
     }
 };

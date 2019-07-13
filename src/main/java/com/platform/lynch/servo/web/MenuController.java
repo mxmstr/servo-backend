@@ -66,12 +66,6 @@ class MenuController {
     							@Valid @RequestBody MenuItem.PublicMenuItem menuItem) throws URISyntaxException {
     	
     	log.info("Request to create menuitem: {}", menuItem);
-
-        // check to see if item already exists
-    	Optional<MenuItem> existing = menuRepository.findById(menuItem.getId());
-
-    	if (existing.isPresent()) 
-    		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     	
     	
     	Optional<Business> user = userRepository.findById(userId);
@@ -79,15 +73,12 @@ class MenuController {
     	if (!user.isPresent()) 
     		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     	
-    	
-    	MenuItem result = new MenuItem(
-    			0L,
-    			user.get(),
-    			menuItem.getName(),
-    			menuItem.getPrice(),
-    			menuItem.getOptions(),
-    			menuItem.getImage()
-    			);
+    	MenuItem result = new MenuItem();
+    	result.setBusiness(user.get());
+		result.setName(menuItem.getName());
+		result.setPrice(menuItem.getPrice());
+		result.setOptions(menuItem.getOptions());
+		result.setImage(menuItem.getImage());
     	
         result = menuRepository.save(result);
         
@@ -117,7 +108,19 @@ class MenuController {
     }
 
     @DeleteMapping("/menu/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
-    	return null;
+    public ResponseEntity<?> delete(@PathVariable Long id,
+										@RequestHeader(value="UserId") String userId) {
+    	
+    	log.info("Request to delete menu item: {}", id);
+    	
+    	Optional<MenuItem> existing = menuRepository.findById(id);
+    	
+    	if (!existing.isPresent()) 
+    		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    	
+    	menuRepository.deleteById(id);
+    	
+        return ResponseEntity.ok().build();
+    	
     }
 }
