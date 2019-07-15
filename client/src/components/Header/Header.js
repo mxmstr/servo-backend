@@ -53,7 +53,7 @@ class Header extends React.Component {
             /* Navigation */
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
                 <div className="container">
-                    <a className="navbar-brand" href="#">React App</a>
+                    <a className="navbar-brand" href="#">Servo</a>
                     <button className="navbar-toggler" type="button" data-toggle="collapse"
                             data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
                             aria-label="Toggle navigation">

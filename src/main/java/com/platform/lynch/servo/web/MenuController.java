@@ -5,7 +5,7 @@ import com.platform.lynch.servo.model.Group;
 import com.platform.lynch.servo.model.GroupRepository;
 import com.platform.lynch.servo.model.MenuItem;
 import com.platform.lynch.servo.model.MenuRepository;
-import com.platform.lynch.servo.model.UserRepository;
+import com.platform.lynch.servo.model.BusinessRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,15 +32,15 @@ class MenuController {
 
     private final Logger log = LoggerFactory.getLogger(MenuController.class);
     private MenuRepository menuRepository;
-    private UserRepository userRepository;
+    private BusinessRepository businessRepository;
 
-    public MenuController(MenuRepository menuRepository, UserRepository userRepository) {
+    public MenuController(MenuRepository menuRepository, BusinessRepository userRepository) {
         this.menuRepository = menuRepository;
-        this.userRepository = userRepository;
+        this.businessRepository = userRepository;
     }
 
     @GetMapping("/menu")
-    Collection<?> menuitems(@RequestHeader(value="UserId") String userId) {
+    Collection<?> getAll(@RequestHeader(value="UserId") String userId) {
     	log.info("Request to get all menu items: {}", userId);
     	
     	List<MenuItem.PublicMenuItem> response = new ArrayList<>();
@@ -68,7 +68,7 @@ class MenuController {
     	log.info("Request to create menuitem: {}", menuItem);
     	
     	
-    	Optional<Business> user = userRepository.findById(userId);
+    	Optional<Business> user = businessRepository.findById(userId);
     	
     	if (!user.isPresent()) 
     		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

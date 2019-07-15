@@ -26,7 +26,7 @@ import com.platform.lynch.servo.model.Group;
 import com.platform.lynch.servo.model.GroupRepository;
 import com.platform.lynch.servo.model.User;
 import com.platform.lynch.servo.model.Business;
-import com.platform.lynch.servo.model.UserRepository;
+import com.platform.lynch.servo.model.BusinessRepository;
 
 import lombok.Value;
 
@@ -48,15 +48,12 @@ public class UserController {
 	private Environment environment;
 	
 	private final Logger log = LoggerFactory.getLogger(UserController.class);
-    private GroupRepository groupRepository;
-    private UserRepository userRepository;
+    private BusinessRepository businessRepository;
     private ClientRegistration registration;
 
-    public UserController(GroupRepository groupRepository, 
-    		UserRepository userRepository, 
+    public UserController(BusinessRepository businessRepository, 
     		ClientRegistrationRepository registrations) {
-        this.groupRepository = groupRepository;
-        this.userRepository = userRepository;
+        this.businessRepository = businessRepository;
         this.registration = registrations.findByRegistrationId("okta");
     }
 
@@ -76,6 +73,13 @@ public class UserController {
     ResponseEntity<?> createUser(@Valid @RequestBody User user) throws URISyntaxException {
     	
         log.info("Request to create user: {}", user);
+        
+        Business result = new Business();
+        result.setId(user.getId());
+        result.setName(user.getName());
+        
+        businessRepository.save(result);
+        
         
         Client client = Clients.builder()
         		.setOrgUrl(environment.getProperty("spring.user.oauth.orgUrl"))

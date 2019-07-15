@@ -17,11 +17,5 @@ public class Customer {
     @Id
     private String id;
     private String name;
-    private String address;
-    private Boolean isOpened;
-    @Lob
-    private byte[] images;
-    private String email;
-    private String password;
     
 }

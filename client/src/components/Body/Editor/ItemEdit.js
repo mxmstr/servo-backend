@@ -7,6 +7,10 @@ import {clearItemApiCall, fetchItemApiCall, putItemApiCall, postItemApiCall} fro
 import {connect} from "react-redux";
 
 class ItemEdit extends React.Component {
+    static defaultProps = {
+        editable: []
+    }
+
     constructor(props){
         super(props);
         this.state = { user: null, item: {} };
@@ -48,59 +52,48 @@ class ItemEdit extends React.Component {
             return null;
         }
 
+        const popupStyle = { flex: 1, 'overflow-y': 'scroll' };
+
         const title = <h2>{ this.props.create ? 'Add New Item' : 'Edit Item' }</h2>;
 
         const fields = Object.keys(this.props.item).map(key => {
+
+                const keyUpper = key.charAt(0).toUpperCase() + key.slice(1);
+
                 return <FormGroup>
-                    <Label for={ key }>{ key }</Label>
+                    <Label for={ key }>{ keyUpper }</Label>
                     <Input type="text" name={ key } id={ key } defaultValue={ this.props.item[key] || '' }
                         onChange={ this.handleChange } autoComplete={ key } 
                         disabled={ !this.props.editable.includes(key) } />
                 </FormGroup>
             });
-        // const fields = this.props.create ? 
-        //     Object.values(this.props.editable).map(value => {
-        //         return <FormGroup>
-        //             <Label for={ value } >{ value }</Label>
-        //             <Input type="text" name={ value } id={ value }
-        //                 onChange={ this.handleChange } autoComplete={ value } />
-        //         </FormGroup>
-        //     }) : 
-        //     Object.keys(this.props.item).map(key => {
-        //         return <FormGroup>
-        //             <Label for={ key }>{ key }</Label>
-        //             <Input type="text" name={ key } id={ key } defaultValue={ this.props.item[key] || '' }
-        //                 onChange={ this.handleChange } autoComplete={ key } 
-        //                 disabled={ !this.props.editable.includes(key) } />
-        //         </FormGroup>
-        //     });
 
         return (
-            <Container fluid>
+            <Popup
+                trigger={ <div></div> }
+                modal={ true }
+                closeOnDocumentClick={ false }
+                closeOnEscape={ false }
+                defaultOpen={ true }
+            >
+                <span> 
+                    <Container fluid>
 
-                { title }
+                    { title }
 
-                <Form onSubmit={ this.handleSubmit }>
-                    { fields }
-                  <FormGroup>
-                    <Button color="primary" type="submit">Save</Button>{' '}
-                    <Button color="secondary" onClick={ this.props.clearItemApiCall }>Cancel</Button>
-                  </FormGroup>
-                </Form>
+                    <Form onSubmit={ this.handleSubmit }>
+                        { fields }
+                    <FormGroup>
+                        <Button color="primary" type="submit">Save</Button>{' '}
+                        <Button color="secondary" onClick={ this.props.clearItemApiCall }>Cancel</Button>
+                    </FormGroup>
+                    </Form>
 
-            </Container>
+                    </Container>
+                </span>
+            </Popup>
         )
-        // return (
-        //     <Popup position="right center">
-        //         <Form onSubmit={this.handleSubmit}>
-        //             {fields}
-        //           <FormGroup>
-        //             <Button color="primary" type="submit">Save</Button>{' '}
-        //             <Button color="secondary" onClick={this.clearItem}>Cancel</Button>
-        //           </FormGroup>
-        //         </Form>
-        //     </Popup>
-        // )
+        
     }
 };
 

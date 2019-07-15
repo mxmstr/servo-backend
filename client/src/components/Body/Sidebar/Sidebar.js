@@ -23,24 +23,24 @@ class Sidebar extends React.Component {
 
     render() {
 
-        if (this.state.authenticated === null) return null;
+        console.log("this.state.authenticated");
+        console.log(this.state.authenticated);
 
-        let navAuth = (
-    	        <ul className="nav flex-column navbar-dark bg-dark">
+        if (this.state.authenticated === null || !this.state.authenticated) return null;
+
+        const navAuth = (
+    	        <ul className="nav flex-column">
     	          <li className="nav-item">
     	              <Link className="nav-link" to="/menu"> Menu </Link>
-    	              <Link className="nav-link" to="/menu"> Menu </Link>
+    	              <Link className="nav-link" to="/tickets"> Tickets </Link>
     	          </li>
     	      </ul>
             );
-        
-        const authNav = this.state.authenticated ? navAuth : null;
 
       return (
-	      /* Navigation */
-              <div className="container">
-              	{navAuth}
-              </div>
+            <div className="align-self-stretch navbar-dark bg-dark">
+                {navAuth}
+            </div>
       )
     }
 

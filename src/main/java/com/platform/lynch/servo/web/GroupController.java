@@ -2,7 +2,7 @@ package com.platform.lynch.servo.web;
 
 import com.platform.lynch.servo.model.Group;
 import com.platform.lynch.servo.model.GroupRepository;
-import com.platform.lynch.servo.model.UserRepository;
+import com.platform.lynch.servo.model.BusinessRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,9 +26,9 @@ class GroupController {
 
     private final Logger log = LoggerFactory.getLogger(GroupController.class);
     private GroupRepository groupRepository;
-    private UserRepository userRepository;
+    private BusinessRepository userRepository;
 
-    public GroupController(GroupRepository groupRepository, UserRepository userRepository) {
+    public GroupController(GroupRepository groupRepository, BusinessRepository userRepository) {
         this.groupRepository = groupRepository;
         this.userRepository = userRepository;
     }

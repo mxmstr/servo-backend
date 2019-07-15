@@ -41,12 +41,15 @@ export const fetchItemsApiCall = (data) => {
     	      credentials: 'include'
     	    })
     	.then(response => response.json())
-	      .then(data => {
-	    	  //console.log(data);
-	    	  dispatch(updateItemList(data));
-	      })
-	      .catch(err => {
-	            console.log(err.message);
-	        });
+		.then(data => {
+			//console.log(data);
+			if (data.status === 404)
+				dispatch(updateItemList([]));
+			else
+				dispatch(updateItemList(data));
+		})
+		.catch(err => {
+			console.log(err.message);
+		});
     };
 };

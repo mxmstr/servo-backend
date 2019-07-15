@@ -1,8 +1,6 @@
 import React from 'react';
 import { withAuth } from '@okta/okta-react';
 import ItemList from "./ItemList";
-import Sidebar from "../Sidebar/Sidebar";
-import {connect} from "react-redux";
 
 class Menu extends React.Component {
     constructor(props){
@@ -25,13 +23,13 @@ class Menu extends React.Component {
 
 
         return (
-            <div className="d-flex flex-row">
-        		<div className="p-2"><Sidebar /></div>
-                <ItemList 
-                    title="Menu Items" 
-                    uri="menu" 
-                    editable={ ['name', 'price', 'options'] } />
-            </div>
+            <ItemList 
+                title="Menu Items" 
+                uri="menu"
+                editable={ ['name', 'price', 'options'] } 
+                add={ true }
+                edit={ true }
+                delete={ true } />
         )
     }
 };
