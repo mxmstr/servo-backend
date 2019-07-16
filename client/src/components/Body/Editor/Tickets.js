@@ -2,6 +2,7 @@ import React from 'react';
 import { Container, Row, Col } from 'reactstrap';
 import { withAuth } from '@okta/okta-react';
 import ItemList from "./ItemList";
+import Buttons from "./Buttons";
 
 class Tickets extends React.Component {
     constructor(props){
@@ -30,17 +31,23 @@ class Tickets extends React.Component {
                     <Col>
                         <ItemList
                             title="Open" 
-                            uri="tickets/open" />
+                            uri="ticket"
+                            actions={ [<Buttons.Complete/>, <Buttons.Incomplete/>] }
+                            filters={ { status: 'OPEN' } } />
                     </Col>
                     <Col>
                         <ItemList 
                             title="Closed" 
-                            uri="tickets/complete" />
+                            uri="ticket"
+                            actions={ [<Buttons.Open/>, <Buttons.Incomplete/>] }
+                            filters={ { status: 'COMPLETE' } } />
                     </Col>
                     <Col>
                         <ItemList 
                             title="Unresolved" 
-                            uri="tickets/incomplete" />
+                            uri="ticket"
+                            actions={ [<Buttons.Open/>, <Buttons.Complete/>] }
+                            filters={ { status: 'INCOMPLETE' } } />
                     </Col>
                 </Row>
             </Container>

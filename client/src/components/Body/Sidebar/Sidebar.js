@@ -33,6 +33,7 @@ class Sidebar extends React.Component {
     	          <li className="nav-item">
     	              <Link className="nav-link" to="/menu"> Menu </Link>
     	              <Link className="nav-link" to="/tickets"> Tickets </Link>
+    	              <Link className="nav-link" to="/profile"> Profile </Link>
     	          </li>
     	      </ul>
             );

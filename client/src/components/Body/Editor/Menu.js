@@ -1,6 +1,8 @@
 import React from 'react';
 import { withAuth } from '@okta/okta-react';
 import ItemList from "./ItemList";
+import Edit from "./Buttons";
+import Buttons from "./Buttons";
 
 class Menu extends React.Component {
     constructor(props){
@@ -28,8 +30,7 @@ class Menu extends React.Component {
                 uri="menu"
                 editable={ ['name', 'price', 'options'] } 
                 add={ true }
-                edit={ true }
-                delete={ true } />
+                actions={ [<Buttons.Edit/>, <Buttons.Delete/>] } />
         )
     }
 };

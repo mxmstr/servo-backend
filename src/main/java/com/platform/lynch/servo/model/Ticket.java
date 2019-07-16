@@ -36,7 +36,7 @@ public class Ticket {
     private Customer customer;
     @OneToOne
     private MenuItem menuItem;
-    private String quantity;
+    private int quantity;
     private String options;
     private Date timestamp;
     @Enumerated(EnumType.STRING)
@@ -50,7 +50,7 @@ public class Ticket {
         private Long id;
         private String customerId;
         private Long itemId;
-        private String quantity;
+        private int quantity;
         private String options;
         private Date timestamp;
         private TicketStatus status;

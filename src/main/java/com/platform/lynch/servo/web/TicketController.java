@@ -47,9 +47,10 @@ class TicketController {
         this.menuRepository = menuRepository;
     }
     
-    Collection<?> getAll(String userId, Ticket.TicketStatus status) {
+    @GetMapping("/ticket")
+    Collection<?> getAll(@RequestHeader(value="UserId") String userId, Ticket.TicketStatus status) {
     	
-    	log.info("Request to get all " + status.toString() + " tickets: {}", userId);
+    	log.info("Request to get all tickets: {}", userId);
     	
     	List<Ticket.PublicTicket> response = new ArrayList<>();
     	Optional<Business> user = businessRepository.findById(userId);
@@ -58,7 +59,7 @@ class TicketController {
     		return response;
     	
     	
-    	List<Ticket> foundTickets = ticketRepository.findAllByMenuItemBusinessInAndStatusIn(user.get(), status);
+    	List<Ticket> foundTickets = ticketRepository.findAllByMenuItemBusiness(user.get());//ticketRepository.findAllByMenuItemBusinessInAndStatusIn(user.get(), status);
     	
     	for (Ticket ticket: foundTickets)
     		response.add(ticket.getPublicEntity());
@@ -86,7 +87,7 @@ class TicketController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
     
-    @PostMapping("/ticket")
+    @PostMapping(value={"/ticket", "/ticket/open", "/ticket/complete", "/ticket/incomplete"})
     ResponseEntity<?> create(@RequestHeader(value="UserId") String userId,
     							@Valid @RequestBody Ticket.PublicTicket ticket) throws URISyntaxException {
     	
@@ -111,7 +112,7 @@ class TicketController {
         return ResponseEntity.ok().body(result);
     }
 
-    @PutMapping("/ticket/{id}")
+    @PutMapping(value={"/ticket/{id}", "/ticket/open/{id}", "/ticket/complete/{id}", "/ticket/incomplete/{id}"})
     ResponseEntity<?> update(@PathVariable Long id,
     							@RequestHeader(value="UserId") String userId,
     							@Valid @RequestBody Ticket.PublicTicket ticket) {
@@ -140,7 +141,7 @@ class TicketController {
         
     }
 
-    @DeleteMapping("/ticket/{id}")
+    @DeleteMapping(value={"/ticket/{id}", "/ticket/open/{id}", "/ticket/complete/{id}", "/ticket/incomplete/{id}"})
     public ResponseEntity<?> delete(@PathVariable Long id,
 										@RequestHeader(value="UserId") String userId) {
     	

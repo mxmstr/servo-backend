@@ -7,9 +7,9 @@ const override = css`
     margin: 0 auto;
 `;
 
-class Loading extends React.Component{
-    render() {
-        return(
+const Loading = () => {
+
+        return (
             <ClipLoader
                 css={override}
                 sizeUnit={"px"}
@@ -18,7 +18,7 @@ class Loading extends React.Component{
                 loading={ true }
             />
         );
-    }
+
 }
 
 export default Loading;

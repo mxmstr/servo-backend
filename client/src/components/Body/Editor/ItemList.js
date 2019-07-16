@@ -6,13 +6,14 @@ import {clearItemApiCall, addItemApiCall, fetchItemApiCall} from "../../../actio
 import {connect} from "react-redux";
 import Loading from "../Loading";
 import ItemEdit from "./ItemEdit";
+import Buttons from "./Buttons";
 
 class ItemList extends React.Component {
     static defaultProps = {
       editable: [],
+      filters: [],
       add: false,
-      edit: false,
-      delete: false
+      actions: []
     }
 
     constructor(props){
@@ -28,7 +29,7 @@ class ItemList extends React.Component {
         await this.props.auth.getUser()
         	.then(user => {
         		this.setState({user});
-        		
+            
         		var data = {uri: this.props.uri, user: user};
 		        this.props.fetchItemsApiCall(data);
         	});
@@ -78,20 +79,26 @@ class ItemList extends React.Component {
       
       head.push(<th>Actions</th>);
       
-      console.log("this.props.items");
-      console.log(this.props.items);
     	const body = noItems ? [] : this.props.items.map(item => {
     		
-    		const values = Object.values(item).map(value => {
+    		    const values = Object.values(item).map(value => {
     	      			return <td style={{whiteSpace: 'nowrap'}}>{ value }</td>
     	      		});
-    		
+                
+            for (var field in this.props.filters) {
+              if (item[field] !== this.props.filters[field])
+                return null;
+            }
+
     	      return <tr key={item.id}>
     	      	{values}
     	        <td>
-	    	        <ButtonGroup>
-                { this.props.edit ? <Button size="sm" color="primary" onClick={() => this.editItem(item.id)}>Edit</Button> : null}
-                { this.props.delete ? <Button size="sm" color="danger" onClick={() => this.removeItem(item.id)}>Delete</Button> : null}
+                <ButtonGroup>
+                { 
+                  this.props.actions.map(action => {
+                    return <action.type id={ item.id } uri={ this.props.uri } editable={ this.props.editable } user={ this.state.user } />;
+                  })
+                }
 	    	        </ButtonGroup>
 	    	      </td>
 	    	    </tr>
@@ -102,11 +109,13 @@ class ItemList extends React.Component {
 
               <div><ItemEdit uri={ this.props.uri } editable={ this.props.editable } /></div>
               
-              { this.props.add ?
-              <div className="float-right">
-                <Button color="success" onClick={ this.addItem }>Add Item</Button>
-              </div>
-              : null }
+              { 
+                this.props.add ?
+                <div className="float-right">
+                  <Buttons.Add uri={ this.props.uri } editable={ this.props.editable } user={ this.state.user } />
+                </div>
+                : null
+              }
 
               <h3>{ this.props.title }</h3>
               { noItems ? 

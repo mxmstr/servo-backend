@@ -7,5 +7,7 @@ import java.util.List;
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
 	
 	List<Ticket> findAllByMenuItemBusinessInAndStatusIn(Business business, Ticket.TicketStatus status);
+
+	List<Ticket> findAllByMenuItemBusiness(Business business);
     
 }
