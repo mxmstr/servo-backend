@@ -87,8 +87,14 @@ class ItemList extends React.Component {
                 return null;
             }
 
+            const cellStyle = {
+              'max-width': '50px',
+              'white-space' : 'nowrap',
+              'overflow' : 'hidden'
+            }
+
     		    const values = this.props.columns.map(column => {
-    	      			return <td style={{whiteSpace: 'nowrap'}}>{ item[column] }</td>
+    	      			return <td style={ cellStyle }>{ item[column] }</td>
     	      		});
 
     	      return <tr key={item.id}>
