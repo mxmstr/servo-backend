@@ -5,13 +5,13 @@ import {fetchItemsApiCall, deleteItemApiCall} from "../../../actions/ItemList";
 import {clearItemApiCall, addItemApiCall, fetchItemApiCall} from "../../../actions/ItemEdit";
 import {connect} from "react-redux";
 import Loading from "../Loading";
-import ItemEdit from "./ItemEdit";
 import Buttons from "./Buttons";
 
 class ItemList extends React.Component {
     static defaultProps = {
-      editable: [],
+      columns: [],
       filters: [],
+      updateInterval: 0,
       add: false,
       actions: []
     }
@@ -70,7 +70,7 @@ class ItemList extends React.Component {
       const noItems = this.props.items.length == 0;
 
 
-    	const columns = noItems ? [] : Object.keys(Object.values(this.props.items)[0]);
+    	const columns = noItems ? [] : this.props.columns;//Object.keys(Object.values(this.props.items)[0]);
     	const head = columns.map(key => {
         const keyUpper = key.charAt(0).toUpperCase() + key.slice(1);
 
@@ -79,16 +79,17 @@ class ItemList extends React.Component {
       
       head.push(<th>Actions</th>);
       
+
     	const body = noItems ? [] : this.props.items.map(item => {
-    		
-    		    const values = Object.values(item).map(value => {
-    	      			return <td style={{whiteSpace: 'nowrap'}}>{ value }</td>
-    	      		});
-                
+
             for (var field in this.props.filters) {
               if (item[field] !== this.props.filters[field])
                 return null;
             }
+
+    		    const values = this.props.columns.map(column => {
+    	      			return <td style={{whiteSpace: 'nowrap'}}>{ item[column] }</td>
+    	      		});
 
     	      return <tr key={item.id}>
     	      	{values}
@@ -96,18 +97,16 @@ class ItemList extends React.Component {
                 <ButtonGroup>
                 { 
                   this.props.actions.map(action => {
-                    return <action.type id={ item.id } uri={ this.props.uri } editable={ this.props.editable } user={ this.state.user } />;
+                    return <action.type item={ item } uri={ this.props.uri } editable={ this.props.editable } user={ this.state.user } />;
                   })
                 }
 	    	        </ButtonGroup>
 	    	      </td>
 	    	    </tr>
     	    });
-    	
+        
         return (
         		<Container fluid>
-
-              <div><ItemEdit uri={ this.props.uri } editable={ this.props.editable } /></div>
               
               { 
                 this.props.add ?

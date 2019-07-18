@@ -1,7 +1,7 @@
 import React from 'react';
 import { withAuth } from '@okta/okta-react';
 import ItemList from "./ItemList";
-import Edit from "./Buttons";
+import ItemEdit from "./ItemEdit";
 import Buttons from "./Buttons";
 
 class Menu extends React.Component {
@@ -25,12 +25,16 @@ class Menu extends React.Component {
 
 
         return (
-            <ItemList 
-                title="Menu Items" 
-                uri="menu"
-                editable={ ['name', 'price', 'options'] } 
-                add={ true }
-                actions={ [<Buttons.Edit/>, <Buttons.Delete/>] } />
+            
+            <div>
+                <ItemEdit uri="menu" editable={ ['name', 'price', 'options'] } />
+                <ItemList 
+                    title="Menu Items" 
+                    uri="menu"
+                    columns={ ['image', 'id', 'name', 'price', 'options'] }
+                    add={ true }
+                    actions={ [<Buttons.Edit/>, <Buttons.Delete/>] } />
+            </div>
         )
     }
 };

@@ -1,6 +1,7 @@
 import React from 'react';
 import Popup from "reactjs-popup";
 import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
+import { Grid } from '@material-ui/core';
 import { withAuth } from '@okta/okta-react';
 import {fetchItemsApiCall} from "../../../actions/ItemList";
 import {clearItemApiCall, fetchItemApiCall, putItemApiCall, postItemApiCall} from "../../../actions/ItemEdit";
@@ -60,12 +61,14 @@ class ItemEdit extends React.Component {
 
                 const keyUpper = key.charAt(0).toUpperCase() + key.slice(1);
 
-                return <FormGroup>
-                    <Label for={ key }>{ keyUpper }</Label>
-                    <Input type="text" name={ key } id={ key } defaultValue={ this.props.item[key] || '' }
-                        onChange={ this.handleChange } autoComplete={ key } 
-                        disabled={ !this.props.editable.includes(key) } />
-                </FormGroup>
+                return <Grid item xs={0}>
+                    <FormGroup>
+                        <Label for={ key }>{ keyUpper }</Label>
+                        <Input type="text" name={ key } id={ key } defaultValue={ this.props.item[key] || '' }
+                            onChange={ this.handleChange } autoComplete={ key } 
+                            disabled={ !this.props.editable.includes(key) } />
+                    </FormGroup>
+                </Grid>
             });
 
         return (
@@ -77,19 +80,21 @@ class ItemEdit extends React.Component {
                 defaultOpen={ true }
             >
                 <span> 
-                    <Container fluid>
+                <Container fluid>
 
                     { title }
 
                     <Form onSubmit={ this.handleSubmit }>
-                        { fields }
+                        <Grid container spacing={1}>
+                            { fields }
+                        </Grid>
                     <FormGroup>
                         <Button color="primary" type="submit">Save</Button>{' '}
                         <Button color="secondary" onClick={ this.props.clearItemApiCall }>Cancel</Button>
                     </FormGroup>
                     </Form>
 
-                    </Container>
+                </Container>
                 </span>
             </Popup>
         )

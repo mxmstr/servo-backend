@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from 'reactstrap';
 import {connect} from "react-redux";
 import {fetchItemsApiCall, deleteItemApiCall} from "../../../actions/ItemList";
-import {clearItemApiCall, addItemApiCall, fetchItemApiCall} from "../../../actions/ItemEdit";
+import {clearItemApiCall, addItemApiCall, fetchItemApiCall, putItemApiCall, postItemApiCall} from "../../../actions/ItemEdit";
 import { IoMdColorWand, IoMdCreate, IoMdClose, IoMdCheckmarkCircleOutline, IoMdFlag, IoMdUndo } from 'react-icons/io';
 
 
@@ -15,6 +15,8 @@ const mapDispatchToProps = (dispatch) => {
       clearItemApiCall: (data) => dispatch(clearItemApiCall(data)),
       addItemApiCall: (data) => dispatch(addItemApiCall(data)),
       deleteItemApiCall: (data) => dispatch(deleteItemApiCall(data)),
+      putItemApiCall: (data) => dispatch(putItemApiCall(data)),
+      postItemApiCall: (data) => dispatch(postItemApiCall(data)),
       fetchItemApiCall: (data) => dispatch(fetchItemApiCall(data)),
       fetchItemsApiCall: (data) => dispatch(fetchItemsApiCall(data))
     }
@@ -56,7 +58,7 @@ const Edit = connect(mapStateToProps, mapDispatchToProps)(class Edit extends Rea
     async onClick() {
         await this.props.clearItemApiCall();
 
-        var data = {uri: this.props.uri, user: this.props.user, id: this.props.id};
+        var data = {uri: this.props.uri, user: this.props.user, id: this.props.item.id};
         this.props.fetchItemApiCall(data);
     }
 
@@ -81,7 +83,7 @@ const Delete = connect(mapStateToProps, mapDispatchToProps)(class Delete extends
     async onClick() {
         await this.props.clearItemApiCall();
 
-        var data = {uri: this.props.uri, user: this.props.user, id: this.props.id};
+        var data = {uri: this.props.uri, user: this.props.user, id: this.props.item.id};
         await this.props.deleteItemApiCall(data);
         this.props.fetchItemsApiCall(data);
     }
@@ -105,6 +107,11 @@ const Open = connect(mapStateToProps, mapDispatchToProps)(class Open extends Rea
     }
 
     async onClick() {
+        var data = { uri: this.props.uri, user: this.props.user, item: this.props.item };
+        data.item.status = 'OPEN'
+
+        await this.props.putItemApiCall(data);
+        this.props.fetchItemsApiCall(data);
     }
 
     render() {
@@ -126,6 +133,11 @@ const Complete = connect(mapStateToProps, mapDispatchToProps)(class Complete ext
     }
 
     async onClick() {
+        var data = { uri: this.props.uri, user: this.props.user, item: this.props.item };
+        data.item.status = 'COMPLETE'
+
+        await this.props.putItemApiCall(data);
+        this.props.fetchItemsApiCall(data);
     }
 
     render() {
@@ -147,6 +159,11 @@ const Incomplete = connect(mapStateToProps, mapDispatchToProps)(class Incomplete
     }
 
     async onClick() {
+        var data = { uri: this.props.uri, user: this.props.user, item: this.props.item };
+        data.item.status = 'INCOMPLETE'
+
+        await this.props.putItemApiCall(data);
+        this.props.fetchItemsApiCall(data);
     }
 
     render() {

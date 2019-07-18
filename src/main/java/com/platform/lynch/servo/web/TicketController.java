@@ -93,7 +93,7 @@ class TicketController {
     	
     	log.info("Request to create ticket: {}", ticket);
     	
-    	Optional<MenuItem> menuItem = menuRepository.findById(ticket.getId());
+    	Optional<MenuItem> menuItem = menuRepository.findById(ticket.getItemId());
     	Optional<Customer> customer = customerRepository.findById(ticket.getCustomerId());
     	
     	if (!menuItem.isPresent() || !customer.isPresent()) 
@@ -120,7 +120,7 @@ class TicketController {
     	log.info("Request to update ticket: {}", ticket);
     	
     	Optional<Ticket> existing = ticketRepository.findById(id);
-    	Optional<MenuItem> menuItem = menuRepository.findById(ticket.getId());
+    	Optional<MenuItem> menuItem = menuRepository.findById(ticket.getItemId());
     	Optional<Customer> customer = customerRepository.findById(ticket.getCustomerId());
     	
     	if (!menuItem.isPresent() || !customer.isPresent()) 
@@ -129,7 +129,8 @@ class TicketController {
     	if (!existing.isPresent()) 
     		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     	
-    	Ticket result = new Ticket();
+    	
+    	Ticket result = existing.get();
     	result.setCustomer(customer.get());
     	result.setMenuItem(menuItem.get());
     	result.setQuantity(ticket.getQuantity());
