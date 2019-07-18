@@ -10,7 +10,7 @@ class RegistrationForm extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            organization: '',
+            name: '',
             email: '',
             password: ''
         };
@@ -37,7 +37,7 @@ class RegistrationForm extends React.Component{
     }
 
     handleOrganizationChange(e){
-        this.setState({organization:e.target.value});
+        this.setState({ name: e.target.value });
     }
     handleEmailChange(e) {
         this.setState({ email: e.target.value });
@@ -58,7 +58,7 @@ class RegistrationForm extends React.Component{
         }
 
         const errorMessage = this.props.error ?
-            <span className="error-message">{this.props.error}</span> :
+            <span className="error-message">{ this.props.error }</span> :
             null;
 
         return(

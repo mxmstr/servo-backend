@@ -21,10 +21,11 @@ import com.okta.sdk.authc.credentials.TokenClientCredentials;
 import com.okta.sdk.client.Client;
 import com.okta.sdk.client.Clients;
 import com.okta.sdk.resource.ResourceException;
+import com.okta.sdk.resource.user.User;
 import com.okta.sdk.resource.user.UserBuilder;
 import com.platform.lynch.servo.model.Group;
 import com.platform.lynch.servo.model.GroupRepository;
-import com.platform.lynch.servo.model.User;
+import com.platform.lynch.servo.model.GenericUser;
 import com.platform.lynch.servo.model.Business;
 import com.platform.lynch.servo.model.BusinessRepository;
 
@@ -70,15 +71,9 @@ public class UserController {
     }
     
     @PostMapping("/user")
-    ResponseEntity<?> createUser(@Valid @RequestBody User user) throws URISyntaxException {
+    ResponseEntity<?> createUser(@Valid @RequestBody GenericUser user) throws URISyntaxException {
     	
         log.info("Request to create user: {}", user);
-        
-        Business result = new Business();
-        result.setId(user.getId());
-        result.setName(user.getName());
-        
-        businessRepository.save(result);
         
         
         Client client = Clients.builder()
@@ -87,12 +82,19 @@ public class UserController {
         		.build();
         
         try {
-        	UserBuilder.instance()
+        	User oktaUser = UserBuilder.instance()
 	        	.setEmail(user.getEmail())
 	        	.setFirstName(user.getName())
 	        	.setPassword(user.getPassword().toCharArray())
 	        	.setActive(true)
 	        	.buildAndCreate(client);
+        	
+        	Business result = new Business();
+            result.setId(oktaUser.getId());
+            result.setName(user.getName());
+            
+            businessRepository.save(result);
+        	
         	return ResponseEntity.ok().build();
         }
         catch(ResourceException e) {

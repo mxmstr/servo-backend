@@ -12,7 +12,7 @@ import javax.persistence.Lob;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class User {
+public class GenericUser {
 
     @Id
     private String id;

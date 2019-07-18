@@ -32,6 +32,7 @@ class Menu extends React.Component {
                     title="Menu Items" 
                     uri="menu"
                     columns={ ['image', 'id', 'name', 'price', 'options'] }
+                    editable={ ['name', 'price', 'options'] }
                     add={ true }
                     actions={ [<Buttons.Edit/>, <Buttons.Delete/>] } />
             </div>
