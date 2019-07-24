@@ -1,8 +1,6 @@
 package com.platform.lynch.servo.web;
 
 import com.platform.lynch.servo.model.Business;
-import com.platform.lynch.servo.model.Group;
-import com.platform.lynch.servo.model.GroupRepository;
 import com.platform.lynch.servo.model.MenuItem;
 import com.platform.lynch.servo.model.MenuRepository;
 import com.platform.lynch.servo.model.Ticket;
@@ -48,18 +46,20 @@ class TicketController {
     }
     
     @GetMapping("/ticket")
-    Collection<?> getAll(@RequestHeader(value="UserId") String userId, Ticket.TicketStatus status) {
+    Collection<?> getAll(@RequestHeader(value="UserId") String userId) {
     	
     	log.info("Request to get all tickets: {}", userId);
     	
     	List<Ticket.PublicTicket> response = new ArrayList<>();
-    	Optional<Business> user = businessRepository.findById(userId);
+    	List<Ticket> foundTickets = new ArrayList<>();
+    	Optional<Business> business = businessRepository.findById(userId);
+    	Optional<Customer> customer = customerRepository.findById(userId);
     	
-    	if (!user.isPresent())
-    		return response;
+    	if (business.isPresent())
+    		foundTickets = ticketRepository.findAllByMenuItemBusiness(business.get());
+    	else if (customer.isPresent())
+    		foundTickets = ticketRepository.findAllByCustomerId(userId);
     	
-    	
-    	List<Ticket> foundTickets = ticketRepository.findAllByMenuItemBusiness(user.get());//ticketRepository.findAllByMenuItemBusinessInAndStatusIn(user.get(), status);
     	
     	for (Ticket ticket: foundTickets)
     		response.add(ticket.getPublicEntity());
@@ -67,15 +67,6 @@ class TicketController {
         return response;
     }
     
-    @GetMapping("/ticket/open")
-    Collection<?> getAllOpen(@RequestHeader(value="UserId") String userId) { return getAll(userId, Ticket.TicketStatus.OPEN); }
-    
-    @GetMapping("/ticket/complete")
-    Collection<?> getAllComplete(@RequestHeader(value="UserId") String userId) { return getAll(userId, Ticket.TicketStatus.COMPLETE); }
-    
-    @GetMapping("/ticket/incomplete")
-    Collection<?> getAllIncomplete(@RequestHeader(value="UserId") String userId) { return getAll(userId, Ticket.TicketStatus.INCOMPLETE); }
-
     @GetMapping("/ticket/{id}")
     ResponseEntity<?> get(@PathVariable String id) {
 
@@ -87,7 +78,7 @@ class TicketController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
     
-    @PostMapping(value={"/ticket", "/ticket/open", "/ticket/complete", "/ticket/incomplete"})
+    @PostMapping("/ticket")
     ResponseEntity<?> create(@RequestHeader(value="UserId") String userId,
     							@Valid @RequestBody Ticket.PublicTicket ticket) throws URISyntaxException {
     	
@@ -112,7 +103,7 @@ class TicketController {
         return ResponseEntity.ok().body(result);
     }
 
-    @PutMapping(value={"/ticket/{id}", "/ticket/open/{id}", "/ticket/complete/{id}", "/ticket/incomplete/{id}"})
+    @PutMapping("/ticket/{id}")
     ResponseEntity<?> update(@PathVariable Long id,
     							@RequestHeader(value="UserId") String userId,
     							@Valid @RequestBody Ticket.PublicTicket ticket) {
@@ -142,7 +133,7 @@ class TicketController {
         
     }
 
-    @DeleteMapping(value={"/ticket/{id}", "/ticket/open/{id}", "/ticket/complete/{id}", "/ticket/incomplete/{id}"})
+    @DeleteMapping("/ticket/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id,
 										@RequestHeader(value="UserId") String userId) {
     	

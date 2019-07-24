@@ -3,14 +3,14 @@ import { Button, ButtonGroup, Container, Table } from 'reactstrap';
 import { withAuth } from '@okta/okta-react';
 import {fetchItemsApiCall, deleteItemApiCall} from "../../../actions/ItemList";
 import {clearItemApiCall, addItemApiCall, fetchItemApiCall} from "../../../actions/ItemEdit";
+import { makeStyles } from '@material-ui/core/styles';
 import {connect} from "react-redux";
+import Draggable from 'react-draggable';
 import Loading from "../Loading";
-import Buttons from "./Buttons";
 
-class ItemList extends React.Component {
+class ItemMap extends React.Component {
     static defaultProps = {
       columns: [],
-      editable: [],
       filters: [],
       updateInterval: 0,
       add: false,
@@ -71,76 +71,51 @@ class ItemList extends React.Component {
       const noItems = this.props.items.length == 0;
 
 
-    	const columns = noItems ? [] : this.props.columns;//Object.keys(Object.values(this.props.items)[0]);
-    	const head = columns.map(key => {
-        const keyUpper = key.charAt(0).toUpperCase() + key.slice(1);
+      const classes = makeStyles(theme => ({
+        reactDraggable: {
+          background: '#ddd',
+          border: '1px solid #999',
+          'border-radius': '3px',
+          display: 'block',
+          'margin-bottom': '10px',
+          padding: '3px 5px',
+          'text-align': 'center'
+        },
+        box: {
+          background: '#fff',
+          border: '1px solid #999',
+          'border-radius': '3px',
+          width: '180px',
+          height: '180px',
+          margin: '10px',
+          padding: '10px',
+          float: 'left'
+        }
+      }));
 
-    		return <th>{ keyUpper }</th>
-      });
-      
-      head.push(<th>Actions</th>);
-      
-
-    	const body = noItems ? [] : this.props.items.map(item => {
+      const body = noItems ? [] : this.props.items.map(item => {
 
             for (var field in this.props.filters) {
               if (item[field] !== this.props.filters[field])
                 return null;
             }
 
-            const cellStyle = {
-              'maxWidth': '50px',
-              'white-space' : 'nowrap',
-              'overflow' : 'hidden'
-            }
-
-    		    const values = this.props.columns.map(column => {
-    	      			return <td style={ cellStyle }>{ item[column] }</td>
-    	      		});
-
-    	      return <tr key={item.id}>
-    	      	{values}
-    	        <td>
-                <ButtonGroup>
-                { 
-                  this.props.actions.map(action => {
-                    return <action.type item={ item } uri={ this.props.uri } editable={ this.props.editable } user={ this.state.user } />;
-                  })
-                }
-	    	        </ButtonGroup>
-	    	      </td>
-	    	    </tr>
+    	      return <Draggable
+                className={classes.box}
+                defaultPosition={ item.position ? {x: item.position[0], y: item.position[1]} : {x:100, y:100} }
+                onStart={this.handleStart}
+                onDrag={this.handleDrag}
+                onStop={this.handleStop}>
+                <div> {item.id} </div>
+              </Draggable>
     	    });
+
+      return (
+        <div>
+            { body }
+        </div>
         
-        return (
-        		<Container fluid>
-              
-              { 
-                this.props.add ?
-                <div className="float-right">
-                  <Buttons.Add uri={ this.props.uri } editable={ this.props.editable } user={ this.state.user } />
-                </div>
-                : null
-              }
-
-              <h3>{ this.props.title }</h3>
-              { noItems ? 
-                <h6>There are no items to display...</h6> : 
-                <Table className="mt-4">
-                  <thead>
-                  <tr>
-                  {head}
-                  </tr>
-                  </thead>
-                  <tbody>
-                  {body}
-                  </tbody>
-                </Table> 
-              }
-              
-
-            </Container>
-        )
+      )
     }
 };
 
@@ -163,4 +138,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
 	mapStateToProps,
   mapDispatchToProps
-)(withAuth(ItemList));
+)(withAuth(ItemMap));

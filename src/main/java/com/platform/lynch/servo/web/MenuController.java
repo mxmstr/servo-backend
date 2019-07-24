@@ -1,8 +1,6 @@
 package com.platform.lynch.servo.web;
 
 import com.platform.lynch.servo.model.Business;
-import com.platform.lynch.servo.model.Group;
-import com.platform.lynch.servo.model.GroupRepository;
 import com.platform.lynch.servo.model.MenuItem;
 import com.platform.lynch.servo.model.MenuRepository;
 import com.platform.lynch.servo.model.BusinessRepository;
@@ -87,7 +85,6 @@ class MenuController {
 
     @PutMapping("/menu/{id}")
     ResponseEntity<?> update(@PathVariable Long id,
-    							@RequestHeader(value="UserId") String userId,
     							@Valid @RequestBody MenuItem.PublicMenuItem menuItem) {
     	
     	log.info("Request to update menu: {}", menuItem);
@@ -108,8 +105,7 @@ class MenuController {
     }
 
     @DeleteMapping("/menu/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id,
-										@RequestHeader(value="UserId") String userId) {
+    public ResponseEntity<?> delete(@PathVariable Long id) {
     	
     	log.info("Request to delete menu item: {}", id);
     	

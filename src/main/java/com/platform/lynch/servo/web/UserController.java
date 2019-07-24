@@ -23,11 +23,12 @@ import com.okta.sdk.client.Clients;
 import com.okta.sdk.resource.ResourceException;
 import com.okta.sdk.resource.user.User;
 import com.okta.sdk.resource.user.UserBuilder;
-import com.platform.lynch.servo.model.Group;
-import com.platform.lynch.servo.model.GroupRepository;
+import com.okta.sdk.resource.user.UserCredentials;
 import com.platform.lynch.servo.model.GenericUser;
 import com.platform.lynch.servo.model.Business;
 import com.platform.lynch.servo.model.BusinessRepository;
+import com.platform.lynch.servo.model.Customer;
+import com.platform.lynch.servo.model.CustomerRepository;
 
 import lombok.Value;
 
@@ -36,10 +37,13 @@ import javax.validation.Valid;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api")
@@ -50,11 +54,14 @@ public class UserController {
 	
 	private final Logger log = LoggerFactory.getLogger(UserController.class);
     private BusinessRepository businessRepository;
+    private CustomerRepository customerRepository;
     private ClientRegistration registration;
 
     public UserController(BusinessRepository businessRepository, 
+    		CustomerRepository customerRepository, 
     		ClientRegistrationRepository registrations) {
         this.businessRepository = businessRepository;
+        this.customerRepository = customerRepository;
         this.registration = registrations.findByRegistrationId("okta");
     }
 
@@ -70,8 +77,8 @@ public class UserController {
         }
     }
     
-    @PostMapping("/user")
-    ResponseEntity<?> createUser(@Valid @RequestBody GenericUser user) throws URISyntaxException {
+    @PostMapping("/business")
+    ResponseEntity<?> createBusiness(@Valid @RequestBody GenericUser user) throws URISyntaxException {
     	
         log.info("Request to create user: {}", user);
         
@@ -83,8 +90,8 @@ public class UserController {
         
         try {
         	User oktaUser = UserBuilder.instance()
+        		.setGroups(new HashSet<String>(Arrays.asList(environment.getProperty("spring.user.group.business"))))
 	        	.setEmail(user.getEmail())
-	        	.setFirstName(user.getName())
 	        	.setPassword(user.getPassword().toCharArray())
 	        	.setActive(true)
 	        	.buildAndCreate(client);
@@ -102,7 +109,40 @@ public class UserController {
         }
         
     }
-
+    
+    @PostMapping("/customer")
+    ResponseEntity<?> createCustomer(@Valid @RequestBody GenericUser user) throws URISyntaxException {
+    	
+        log.info("Request to create user: {}", user);
+        
+        
+        Client client = Clients.builder()
+        		.setOrgUrl(environment.getProperty("spring.user.oauth.orgUrl"))
+        		.setClientCredentials(new TokenClientCredentials(environment.getProperty("spring.user.oauth.token")))
+        		.build();
+        
+        try {
+        	User oktaUser = UserBuilder.instance()
+        		.setGroups(new HashSet<String>(Arrays.asList(environment.getProperty("spring.user.group.customer"))))
+	        	.setEmail(user.getEmail())
+	        	.setPassword(user.getPassword().toCharArray())
+	        	.setActive(true)
+	        	.buildAndCreate(client);
+        	
+        	Customer result = new Customer();
+            result.setId(oktaUser.getId());
+            result.setName(user.getName());
+            
+            customerRepository.save(result);
+        	
+        	return ResponseEntity.ok().build();
+        }
+        catch(ResourceException e) {
+        	return ResponseEntity.badRequest().build();
+        }
+        
+    }
+    
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request,
                                     @AuthenticationPrincipal(expression = "idToken") OidcIdToken idToken) {

@@ -12,6 +12,7 @@ import LoginPage from './components/Body/Login/LoginPage';
 import ProfilePage from './components/Body/Profile/ProfilePage';
 import Menu from './components/Body/Editor/Menu';
 import Tickets from './components/Body/Editor/Tickets';
+import Tables from './components/Body/Editor/Tables';
 import './App.css';
 
 export default class App extends Component {
@@ -30,6 +31,7 @@ export default class App extends Component {
                             <SecureRoute path="/profile" component={ProfilePage} />
                             <SecureRoute path="/menu" component={Menu} />
                             <SecureRoute path="/tickets" component={Tickets} />
+                            <SecureRoute path="/tables" component={Tables} />
                         </Col>
                     </Row>
                     </main>

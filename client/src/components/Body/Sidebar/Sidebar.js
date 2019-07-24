@@ -22,10 +22,7 @@ class Sidebar extends React.Component {
     }
 
     render() {
-
-        console.log("this.state.authenticated");
-        console.log(this.state.authenticated);
-
+        
         if (this.state.authenticated === null || !this.state.authenticated) return null;
 
         const navAuth = (
@@ -33,6 +30,7 @@ class Sidebar extends React.Component {
     	          <li className="nav-item">
     	              <Link className="nav-link" to="/menu"> Menu </Link>
     	              <Link className="nav-link" to="/tickets"> Tickets </Link>
+    	              <Link className="nav-link" to="/tables"> Tables </Link>
     	              <Link className="nav-link" to="/profile"> Profile </Link>
     	          </li>
     	      </ul>

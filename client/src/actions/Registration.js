@@ -11,12 +11,11 @@ export const registrationSuccess = () => ({
 });
 
 export const registrationApiCall = (oktaAuth, data) => {
-    console.log(data);
     return dispatch => {
     	
         return axios({
             method: 'post',
-            url: '/api/user',
+            url: '/api/business',
             data: data,
             config: {
                 headers: {

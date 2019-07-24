@@ -5,6 +5,9 @@ spring:
     oauth:
       token: 00IAqkAMGmNeCHH99L8jvnWA2-8Ca5SxLqzyf8rQln
       orgUrl: https://dev-486832.okta.com/
+    group:
+      business: 00gyjl6beOm9aDu8j356
+      customer: 00gyjl2l7vUtdPGlS356
   security:
     oauth2:
       client:
