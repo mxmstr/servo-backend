@@ -111,7 +111,7 @@ public class UserController {
     }
     
     @PostMapping("/customer")
-    ResponseEntity<?> createCustomer(@Valid @RequestBody GenericUser user) throws URISyntaxException {
+    GenericUser createCustomer(@Valid @RequestBody GenericUser user) throws URISyntaxException {
     	
         log.info("Request to create user: {}", user);
         
@@ -135,10 +135,10 @@ public class UserController {
             
             customerRepository.save(result);
         	
-        	return ResponseEntity.ok().build();
+            return user;
         }
         catch(ResourceException e) {
-        	return ResponseEntity.badRequest().build();
+        	return null;
         }
         
     }

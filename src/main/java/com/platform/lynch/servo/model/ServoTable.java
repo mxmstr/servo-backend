@@ -7,11 +7,13 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import com.platform.lynch.servo.model.Ticket.PublicTicket;
 import com.platform.lynch.servo.model.Ticket.TicketStatus;
@@ -27,7 +29,7 @@ public class ServoTable {
     private Long id;
     @ManyToOne
     private Business business;
-    @ManyToOne
+    @OneToOne
     private Customer customer;
     private double[] position = {0, 0};
     

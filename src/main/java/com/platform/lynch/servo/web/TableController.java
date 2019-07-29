@@ -47,15 +47,20 @@ class TableController {
     Collection<?> getAll(@RequestHeader(value="UserId") String userId) {
     	
     	log.info("Request to get all tables: {}", userId);
+
+    	List<ServoTable> foundTables = new ArrayList<>();
+    	Optional<Business> business = businessRepository.findById(userId);
+    	Optional<Customer> customer = customerRepository.findById(userId);
+    	
+    	if (business.isPresent())
+    		foundTables = tableRepository.findAllByBusiness(business.get());
+    	else if (customer.isPresent())
+    		foundTables = tableRepository.findAllByCustomer(customer.get());
+    	else
+    		return foundTables;
+    	
     	
     	List<ServoTable.PublicTable> response = new ArrayList<>();
-    	Optional<Business> user = businessRepository.findById(userId);
-    	
-    	if (!user.isPresent())
-    		return response;
-    	
-    	
-    	List<ServoTable> foundTables = tableRepository.findAllByBusinessId(userId);
     	
     	for (ServoTable table: foundTables)
     		response.add(table.getPublicEntity());
@@ -96,16 +101,15 @@ class TableController {
 
     @PutMapping("/table/{id}")
     ResponseEntity<?> update(@PathVariable Long id,
-    							@RequestHeader(value="UserId") String userId,
     							@Valid @RequestBody ServoTable.PublicTable table) {
     	
     	log.info("Request to update table: {}", table);
     	
     	Optional<ServoTable> existing = tableRepository.findById(id);
-    	Optional<Customer> customer = customerRepository.findById(table.getCustomerId());
+    	Optional<Customer> customer = table.getCustomerId() == null ? null : customerRepository.findById(table.getCustomerId());
     	Optional<Business> business = businessRepository.findById(table.getBusinessId());
     	
-    	if (!business.isPresent() || !customer.isPresent()) 
+    	if (!business.isPresent() || (table.getCustomerId() != null && !customer.isPresent())) 
     		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     	
     	if (!existing.isPresent()) 
@@ -114,7 +118,7 @@ class TableController {
     	
     	ServoTable result = existing.get();
     	result.setBusiness(business.get());
-    	result.setCustomer(customer.get());
+    	result.setCustomer(table.getCustomerId() == null ? null : customer.get());
     	result.setPosition(table.getPosition());
     	
         return ResponseEntity.ok().body(tableRepository.save(result));

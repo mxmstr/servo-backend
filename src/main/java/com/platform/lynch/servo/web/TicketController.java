@@ -23,6 +23,9 @@ import java.net.URISyntaxException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -64,6 +67,13 @@ class TicketController {
     	for (Ticket ticket: foundTickets)
     		response.add(ticket.getPublicEntity());
     	
+    	
+    	Collections.sort(response, new Comparator<Ticket.PublicTicket>() {
+    	    public int compare(Ticket.PublicTicket a, Ticket.PublicTicket b) {
+    	        return b.getTimestamp().compareTo(a.getTimestamp());
+    	    }
+    	});
+    	
         return response;
     }
     
@@ -95,7 +105,7 @@ class TicketController {
     	result.setMenuItem(menuItem.get());
     	result.setQuantity(ticket.getQuantity());
     	result.setOptions(ticket.getOptions());
-    	result.setTimestamp(ticket.getTimestamp());
+    	result.setTimestamp(new Date());
     	result.setStatus(ticket.getStatus());
     	
         result = ticketRepository.save(result);

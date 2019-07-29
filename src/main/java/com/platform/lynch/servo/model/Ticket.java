@@ -51,6 +51,7 @@ public class Ticket {
         private Long id;
         private String customerId;
         private Long itemId;
+        private String itemName;
         private int quantity;
         private String options;
         private Date timestamp;
@@ -60,7 +61,7 @@ public class Ticket {
     
     public PublicTicket getPublicEntity() {
     	
-    	return new PublicTicket(id, customer == null ? "" : customer.getId(), menuItem == null ? 0L : menuItem.getId(), quantity, options, timestamp, status);
+    	return new PublicTicket(id, customer == null ? "" : customer.getId(), menuItem == null ? 0L : menuItem.getId(),  menuItem == null ? "" : menuItem.getName(), quantity, options, timestamp, status);
     	
     }
     

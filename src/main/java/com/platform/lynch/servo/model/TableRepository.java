@@ -7,6 +7,9 @@ import java.util.Optional;
 
 public interface TableRepository extends JpaRepository<ServoTable, Long> {
 	
-	List<ServoTable> findAllByBusinessId(String id);
+	Optional<ServoTable> findById(Long id);
+	
+	List<ServoTable> findAllByBusiness(Business business);
+	List<ServoTable> findAllByCustomer(Customer customer);
     
 }
