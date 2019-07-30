@@ -2,11 +2,13 @@ import React from 'react';
 import { withAuth } from '@okta/okta-react';
 import {changePasswordApiCall} from "../../../actions/Profile";
 import {connect} from "react-redux";
+import Loading from "../Loading";
+
 
 class ProfilePage extends React.Component {
     constructor(props){
         super(props);
-        this.state = { user: null, oldPassword: '', newPassword: '' };
+        this.state = { user: null, oldPassword: '', newPassword: '', mounted: false };
         this.getCurrentUser = this.getCurrentUser.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleOldPasswordChange = this.handleOldPasswordChange.bind(this);
@@ -36,10 +38,12 @@ class ProfilePage extends React.Component {
 
     componentDidMount(){
         this.getCurrentUser();
+        this.setState({mounted: true});
     }
 
     render() {
-        if(!this.state.user) return null;
+        if (!this.state.mounted || !this.state.user) return <Loading/>;
+
         const errorMessage = this.props.error ?
             (<div className="alert alert-danger"><strong>Error! </strong>{this.props.error}</div>):
             null;

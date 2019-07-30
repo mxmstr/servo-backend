@@ -52,7 +52,7 @@ class Header extends React.Component {
         return (
             /* Navigation */
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-                <div className="container">
+                <div className="container-fluid">
                     <a className="navbar-brand" href="#">Servo</a>
                     <button className="navbar-toggler" type="button" data-toggle="collapse"
                             data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"

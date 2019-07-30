@@ -20,6 +20,9 @@ class Tickets extends React.Component {
     }
 
     async getCurrentUser(){
+        // Request user credentials from oAuth provider
+        // Then start a timer to continually refresh items
+        
         this.props.auth.getUser()
             .then(user => {
                 this.setState({user});

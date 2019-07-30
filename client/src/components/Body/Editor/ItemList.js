@@ -27,6 +27,9 @@ class ItemList extends React.Component {
     }
 
     async getCurrentUser() {
+      // Request user credentials from oAuth provider
+      // Then fetch items using the credentials
+
         await this.props.auth.getUser()
         	.then(user => {
         		this.setState({user});
@@ -68,10 +71,11 @@ class ItemList extends React.Component {
     	
     	if (!this.state.mounted || !this.state.user) return <Loading/>;
       
-      const noItems = this.props.items.length == 0;
+      const noItems = this.props.items.length === 0;
 
 
-    	const columns = noItems ? [] : this.props.columns;//Object.keys(Object.values(this.props.items)[0]);
+      // Create the table header from columns attribute
+    	const columns = noItems ? [] : this.props.columns;
     	const head = columns.map(key => {
         const keyUpper = key.charAt(0).toUpperCase() + key.slice(1);
 
@@ -81,6 +85,7 @@ class ItemList extends React.Component {
       head.push(<th>Actions</th>);
       
 
+      // Create rows for each item, add action buttons
     	const body = noItems ? [] : this.props.items.map(item => {
 
             for (var field in this.props.filters) {
@@ -116,6 +121,7 @@ class ItemList extends React.Component {
         		<Container fluid>
               
               { 
+                // Optional add item button
                 this.props.add ?
                 <div className="float-right">
                   <Buttons.Add uri={ this.props.uri } editable={ this.props.editable } user={ this.state.user } />

@@ -20,11 +20,11 @@ export default class App extends Component {
         return (
             <div>
                 <Header />
-                <Container fluid>
+                <Container fluid style={ { height: '100vh' } }>
                     <main role="main">
                     <Row >
-                        <Sidebar />
-                        <Col>
+                        <Sidebar/>
+                        <Col style={ { height: '100vh' } }>
                             <Route path="/" exact={true} render={() => <LoginPage baseUrl={config.url} />} />
                             <Route path="/implicit/callback" component={ImplicitCallback} />
                             <Route path="/register" component={RegistrationForm} />

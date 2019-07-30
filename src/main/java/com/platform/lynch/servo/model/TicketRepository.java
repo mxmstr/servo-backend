@@ -11,5 +11,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 	List<Ticket> findAllByMenuItemBusiness(Business business);
 
 	List<Ticket> findAllByCustomerId(String userId);
+
+	List<Ticket> findAllByCustomer(Customer customer);
     
 }

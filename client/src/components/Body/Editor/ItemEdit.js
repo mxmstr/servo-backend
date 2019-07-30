@@ -20,6 +20,8 @@ class ItemEdit extends React.Component {
     }
 
     async getCurrentUser() {
+        // Request user credentials from oAuth provider
+
         await this.props.auth.getUser()
         	.then(user => {
         		this.setState({user});
@@ -27,6 +29,8 @@ class ItemEdit extends React.Component {
     }
 
     handleChange(event) {
+        // Update the pending item changes in the state
+
 	    const target = event.target;
 	    const value = target.value;
         const name = target.name;
@@ -36,9 +40,11 @@ class ItemEdit extends React.Component {
     async handleSubmit(e) {
         e.preventDefault();
 
+        // If creating, use the state item. If editing, merge the state item with the original item
         const item = this.props.create ? this.state.item : Object.assign(this.props.item, this.state.item);
         var data = { uri: this.props.uri, user: this.state.user, item: item };
 
+        // If creating, do a post api call instead of a put
         this.props.create ? await this.props.postItemApiCall(data) : await this.props.putItemApiCall(data);
         this.props.fetchItemsApiCall(data);
     }
@@ -49,6 +55,7 @@ class ItemEdit extends React.Component {
 
     render() {
         if (!this.props.item) {
+            // Reset the state item since we're no longer editing
             this.state.item = {};
             return null;
         }
@@ -57,6 +64,7 @@ class ItemEdit extends React.Component {
 
         const title = <h2>{ this.props.create ? 'Add New Item' : 'Edit Item' }</h2>;
 
+        // Show all item's fields, disable fields if they're not editable
         const fields = Object.keys(this.props.item).map(key => {
 
                 const keyUpper = key.charAt(0).toUpperCase() + key.slice(1);

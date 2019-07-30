@@ -37,7 +37,7 @@ class Sidebar extends React.Component {
             );
 
       return (
-            <div className="align-self-stretch navbar-dark bg-dark">
+            <div className="navbar-dark bg-dark">
                 {navAuth}
             </div>
       )

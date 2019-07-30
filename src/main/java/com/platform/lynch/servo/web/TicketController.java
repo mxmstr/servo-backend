@@ -61,7 +61,7 @@ class TicketController {
     	if (business.isPresent())
     		foundTickets = ticketRepository.findAllByMenuItemBusiness(business.get());
     	else if (customer.isPresent())
-    		foundTickets = ticketRepository.findAllByCustomerId(userId);
+    		foundTickets = ticketRepository.findAllByCustomer(customer.get());
     	
     	
     	for (Ticket ticket: foundTickets)

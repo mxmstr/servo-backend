@@ -62,8 +62,10 @@ class RegistrationForm extends React.Component{
             null;
 
         return(
-            <form className="form-horizontal col-sm-6" onSubmit={this.handleSubmit}>
-                <h3>Registration Form</h3>
+            <form className="form-horizontal col-sm-6"
+                style={ {margin: '0 auto', width:'80%'} }
+                onSubmit={this.handleSubmit}>
+                <h3 style={ {textAlign: 'center'} }>Registration</h3>
                 <br />
                 {errorMessage}
                 <div className="form-group">

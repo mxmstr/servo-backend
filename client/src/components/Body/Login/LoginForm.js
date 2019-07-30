@@ -45,8 +45,10 @@ class LoginForm extends React.Component {
             null;
 
         return (
-            <form className="form-horizontal col-sm-6" onSubmit={this.handleSubmit}>
-                <h3>Login Form</h3>
+            <form className="form-vertical col-sm-6" 
+                style={ {margin: '0 auto', width:'80%'} } 
+                onSubmit={ this.handleSubmit }>
+                <h3 style={ {textAlign: 'center'} }>Welcome to Servo</h3>
                 <br />
                 {errorMessage}
                 <div className="form-group">

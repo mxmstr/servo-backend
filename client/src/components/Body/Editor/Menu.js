@@ -12,6 +12,8 @@ class Menu extends React.Component {
     }
 
     async getCurrentUser(){
+        // Request user credentials from oAuth provider
+        
         this.props.auth.getUser()
             .then(user => this.setState({user}));
     }
