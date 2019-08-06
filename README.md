@@ -38,6 +38,10 @@ And then to start the server, run:
 
 This will open a browser window with the Servo home page.
 
+# Wireframes and User Stories
+
+https://docs.google.com/presentation/d/1KBoNeWJiPTsLH2tVn1RpcKJelRB2MnoCL5Gw5ZLMCSk/edit?usp=sharing
+
 # Screenshots
 
 ![alt text](https://github.com/mxmstr/servo-backend/blob/master/screenshots/login.PNG)
@@ -45,8 +49,4 @@ This will open a browser window with the Servo home page.
 ![alt text](https://github.com/mxmstr/servo-backend/blob/master/screenshots/menu.PNG)
 ![alt text](https://github.com/mxmstr/servo-backend/blob/master/screenshots/tables.PNG)
 ![alt text](https://github.com/mxmstr/servo-backend/blob/master/screenshots/tickets.PNG)
-
-# Wireframes and User Stories
-
-https://docs.google.com/presentation/d/1KBoNeWJiPTsLH2tVn1RpcKJelRB2MnoCL5Gw5ZLMCSk/edit?usp=sharing
 
