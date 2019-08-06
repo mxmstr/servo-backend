@@ -57,17 +57,19 @@ class TicketController {
     	List<Ticket> foundTickets = new ArrayList<>();
     	Optional<Business> business = businessRepository.findById(userId);
     	Optional<Customer> customer = customerRepository.findById(userId);
-    	
+
+    	// Check whether user id belongs to a business or customer. Return tickets accordingly.
     	if (business.isPresent())
     		foundTickets = ticketRepository.findAllByMenuItemBusiness(business.get());
     	else if (customer.isPresent())
     		foundTickets = ticketRepository.findAllByCustomer(customer.get());
     	
-    	
+
     	for (Ticket ticket: foundTickets)
     		response.add(ticket.getPublicEntity());
     	
     	
+    	// Sort the tickets to show the most recent first
     	Collections.sort(response, new Comparator<Ticket.PublicTicket>() {
     	    public int compare(Ticket.PublicTicket a, Ticket.PublicTicket b) {
     	        return b.getTimestamp().compareTo(a.getTimestamp());
@@ -93,13 +95,15 @@ class TicketController {
     							@Valid @RequestBody Ticket.PublicTicket ticket) throws URISyntaxException {
     	
     	log.info("Request to create ticket: {}", ticket);
-    	
+
+    	// Check that the menu item and customer actually exist
     	Optional<MenuItem> menuItem = menuRepository.findById(ticket.getItemId());
     	Optional<Customer> customer = customerRepository.findById(ticket.getCustomerId());
     	
     	if (!menuItem.isPresent() || !customer.isPresent()) 
     		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     	
+    	// Save the ticket
     	Ticket result = new Ticket();
     	result.setCustomer(customer.get());
     	result.setMenuItem(menuItem.get());
@@ -120,6 +124,8 @@ class TicketController {
     	
     	log.info("Request to update ticket: {}", ticket);
     	
+    	// Check that the ticket actually exists
+    	// Check that the menu item and customer actually exist
     	Optional<Ticket> existing = ticketRepository.findById(id);
     	Optional<MenuItem> menuItem = menuRepository.findById(ticket.getItemId());
     	Optional<Customer> customer = customerRepository.findById(ticket.getCustomerId());
@@ -131,6 +137,7 @@ class TicketController {
     		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     	
     	
+    	// Save the ticket
     	Ticket result = existing.get();
     	result.setCustomer(customer.get());
     	result.setMenuItem(menuItem.get());
@@ -148,12 +155,14 @@ class TicketController {
 										@RequestHeader(value="UserId") String userId) {
     	
     	log.info("Request to delete ticket: {}", id);
-    	
+
+    	// Check that the ticket actually exists
     	Optional<Ticket> existing = ticketRepository.findById(id);
     	
     	if (!existing.isPresent()) 
     		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     	
+    	// Delete the ticket
     	ticketRepository.deleteById(id);
     	
         return ResponseEntity.ok().build();

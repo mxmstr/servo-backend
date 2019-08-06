@@ -52,6 +52,7 @@ class TableController {
     	Optional<Business> business = businessRepository.findById(userId);
     	Optional<Customer> customer = customerRepository.findById(userId);
     	
+    	// Check whether user id belongs to a business or customer. Return tables accordingly.
     	if (business.isPresent())
     		foundTables = tableRepository.findAllByBusiness(business.get());
     	else if (customer.isPresent())
@@ -59,7 +60,8 @@ class TableController {
     	else
     		return foundTables;
     	
-    	
+
+    	// Get a list of all tables that belong to the specified user id
     	List<ServoTable.PublicTable> response = new ArrayList<>();
     	
     	for (ServoTable table: foundTables)
@@ -85,11 +87,13 @@ class TableController {
     	
     	log.info("Request to create table: {}", table);
     	
+    	// Check that the user id is an existing business
     	Optional<Business> business = businessRepository.findById(userId);
     	
     	if (!business.isPresent()) 
     		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     	
+    	// Save the table
     	ServoTable result = new ServoTable();
     	result.setBusiness(business.get());
     	result.setPosition(table.getPosition());
@@ -104,7 +108,9 @@ class TableController {
     							@Valid @RequestBody ServoTable.PublicTable table) {
     	
     	log.info("Request to update table: {}", table);
-    	
+
+    	// Check that the table actually exists
+    	// Check that the business exists and either the customer exists or the customer has been removed
     	Optional<ServoTable> existing = tableRepository.findById(id);
     	Optional<Customer> customer = table.getCustomerId() == null ? null : customerRepository.findById(table.getCustomerId());
     	Optional<Business> business = businessRepository.findById(table.getBusinessId());
@@ -116,6 +122,7 @@ class TableController {
     		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     	
     	
+    	// Save the table
     	ServoTable result = existing.get();
     	result.setBusiness(business.get());
     	result.setCustomer(table.getCustomerId() == null ? null : customer.get());
@@ -130,12 +137,14 @@ class TableController {
 										@RequestHeader(value="UserId") String userId) {
     	
     	log.info("Request to delete table: {}", id);
-    	
+
+    	// Check that the table actually exists
     	Optional<ServoTable> existing = tableRepository.findById(id);
     	
     	if (!existing.isPresent()) 
     		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     	
+    	// Delete the table
     	tableRepository.deleteById(id);
     	
         return ResponseEntity.ok().build();

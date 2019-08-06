@@ -65,29 +65,32 @@ public class UserController {
         this.registration = registrations.findByRegistrationId("okta");
     }
 
-    @GetMapping("/user")
-    public ResponseEntity<?> getUser(@AuthenticationPrincipal OAuth2User user) {
-    	
-    	log.info("Request to get users: {}", user);
-    	
-        if (user == null) {
-            return new ResponseEntity<>("", HttpStatus.OK);
-        } else {
-            return ResponseEntity.ok().body(user.getAttributes());
-        }
-    }
+//    @GetMapping("/user")
+//    public ResponseEntity<?> getUser(@AuthenticationPrincipal OAuth2User user) {
+//    	
+//    	log.info("Request to get users: {}", user);
+//    	
+//        if (user == null) {
+//            return new ResponseEntity<>("", HttpStatus.OK);
+//        } else {
+//            return ResponseEntity.ok().body(user.getAttributes());
+//        }
+//    }
     
     @PostMapping("/business")
     ResponseEntity<?> createBusiness(@Valid @RequestBody GenericUser user) throws URISyntaxException {
     	
-        log.info("Request to create user: {}", user);
+        log.info("Request to create business: {}", user);
         
         
+        // Establish a connection to Okta server using the api token
         Client client = Clients.builder()
         		.setOrgUrl(environment.getProperty("spring.user.oauth.orgUrl"))
         		.setClientCredentials(new TokenClientCredentials(environment.getProperty("spring.user.oauth.token")))
         		.build();
         
+        
+        // Try to create a new Okta user using the input credentials. Save user to the db if successful.
         try {
         	User oktaUser = UserBuilder.instance()
         		.setGroups(new HashSet<String>(Arrays.asList(environment.getProperty("spring.user.group.business"))))
@@ -113,14 +116,17 @@ public class UserController {
     @PostMapping("/customer")
     GenericUser createCustomer(@Valid @RequestBody GenericUser user) throws URISyntaxException {
     	
-        log.info("Request to create user: {}", user);
+        log.info("Request to create customer: {}", user);
         
         
+        // Establish a connection to Okta server using the api token
         Client client = Clients.builder()
         		.setOrgUrl(environment.getProperty("spring.user.oauth.orgUrl"))
         		.setClientCredentials(new TokenClientCredentials(environment.getProperty("spring.user.oauth.token")))
         		.build();
         
+        
+        // Try to create a new Okta user using the input credentials. Save user to the db if successful.
         try {
         	User oktaUser = UserBuilder.instance()
         		.setGroups(new HashSet<String>(Arrays.asList(environment.getProperty("spring.user.group.customer"))))
@@ -143,17 +149,17 @@ public class UserController {
         
     }
     
-    @PostMapping("/logout")
-    public ResponseEntity<?> logout(HttpServletRequest request,
-                                    @AuthenticationPrincipal(expression = "idToken") OidcIdToken idToken) {
-        // send logout URL to client so they can initiate logout
-        String logoutUrl = this.registration.getProviderDetails()
-                .getConfigurationMetadata().get("end_session_endpoint").toString();
-
-        Map<String, String> logoutDetails = new HashMap<>();
-        logoutDetails.put("logoutUrl", logoutUrl);
-        logoutDetails.put("idToken", idToken.getTokenValue());
-        request.getSession(false).invalidate();
-        return ResponseEntity.ok().body(logoutDetails);
-    }
+//    @PostMapping("/logout")
+//    public ResponseEntity<?> logout(HttpServletRequest request,
+//                                    @AuthenticationPrincipal(expression = "idToken") OidcIdToken idToken) {
+//        // send logout URL to client so they can initiate logout
+//        String logoutUrl = this.registration.getProviderDetails()
+//                .getConfigurationMetadata().get("end_session_endpoint").toString();
+//
+//        Map<String, String> logoutDetails = new HashMap<>();
+//        logoutDetails.put("logoutUrl", logoutUrl);
+//        logoutDetails.put("idToken", idToken.getTokenValue());
+//        request.getSession(false).invalidate();
+//        return ResponseEntity.ok().body(logoutDetails);
+//    }
 }

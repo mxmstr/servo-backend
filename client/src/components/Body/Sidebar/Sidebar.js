@@ -23,6 +23,7 @@ class Sidebar extends React.Component {
 
     render() {
         
+        // Hide if user is not logged in
         if (this.state.authenticated === null || !this.state.authenticated) return null;
 
         const navAuth = (

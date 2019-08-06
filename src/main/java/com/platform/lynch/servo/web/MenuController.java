@@ -41,6 +41,7 @@ class MenuController {
     Collection<?> getAll(@RequestHeader(value="UserId") String userId) {
     	log.info("Request to get all menu items: {}", userId);
     	
+    	// Get a list of all menu items that belong to the specified business id
     	List<MenuItem.PublicMenuItem> response = new ArrayList<>();
     	
     	for (MenuItem menuItem: menuRepository.findAllByBusinessId(userId)) {
@@ -66,11 +67,13 @@ class MenuController {
     	log.info("Request to create menuitem: {}", menuItem);
     	
     	
+    	// Check that the user id is an existing business
     	Optional<Business> user = businessRepository.findById(userId);
     	
     	if (!user.isPresent()) 
     		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     	
+    	// Save the menu item
     	MenuItem result = new MenuItem();
     	result.setBusiness(user.get());
 		result.setName(menuItem.getName());
@@ -89,11 +92,13 @@ class MenuController {
     	
     	log.info("Request to update menu: {}", menuItem);
     	
+    	// Check that the menu item actually exists
     	Optional<MenuItem> existing = menuRepository.findById(id);
     	
     	if (!existing.isPresent()) 
     		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     	
+    	// Save the menu item
     	MenuItem result = existing.get();
     	result.setName(menuItem.getName());
     	result.setPrice(menuItem.getPrice());
@@ -109,11 +114,13 @@ class MenuController {
     	
     	log.info("Request to delete menu item: {}", id);
     	
+    	// Check that the menu item actually exists
     	Optional<MenuItem> existing = menuRepository.findById(id);
     	
     	if (!existing.isPresent()) 
     		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     	
+    	// Delete the menu item
     	menuRepository.deleteById(id);
     	
         return ResponseEntity.ok().build();
