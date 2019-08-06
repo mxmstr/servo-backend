@@ -11,6 +11,15 @@ With maven now added to the system PATH, you can open a terminal and navigate to
 The server will now be running on port 8080.
 
 
+Servo expects there to be a MySQL server running on localhost:3306. You can configure the database connection in `src/main/resources/application.yml`
+
+Install HeidiSQL: 
+
+https://www.heidisql.com/download.php
+
+And create a new database called "servo" running on port 3306 with the same root credentials specified in `application.yml` 
+
+
 You can use the React client to interact with the server. To start it, first install Node:
 
 https://www.guru99.com/download-install-node-js.html
@@ -24,7 +33,6 @@ And then to start the server, run:
 `npm run start`
 
 This will open a browser window with the Servo home page.
-
 
 # screenshots
 
