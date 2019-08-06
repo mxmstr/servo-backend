@@ -22,7 +22,7 @@ With maven now added to the system PATH, you can open a terminal and navigate to
 
 The server will now be running on port 8080.
 
-### Front End
+### Frontend
 
 You can use the React client to interact with the server. To start it, first install Node:
 
