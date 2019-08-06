@@ -38,6 +38,8 @@ And then to start the server, run:
 
 This will open a browser window with the Servo home page.
 
+![alt text](https://raw.githubusercontent.com/mxmstr/servo-backend/master/screenshots/login.png)
+
 # screenshots
 
 # Diagrams, uml, wireframes
