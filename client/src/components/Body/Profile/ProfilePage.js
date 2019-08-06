@@ -55,31 +55,11 @@ class ProfilePage extends React.Component {
         return (
             <div>
                 <section className="user-profile">
-                    <h1>User Profile (Secure Page)</h1>
+                    <h1>THIS IS YOUR PROFILE.</h1>
                     <div>
-                        <label>Name:</label>
-                        <span>{this.state.user.name}</span>
+                        <label>Name: <span>{this.state.user.name}</span></label>
                     </div>
                 </section>
-                <br />
-                <br />
-                <form className="form-horizontal col-sm-6" onSubmit={this.handleSubmit}>
-                <h3>Change Password</h3>
-                    <br />
-                    {errorMessage}
-                    {successMessage}
-                    <div className="form-group">
-                        <label>Old Password:</label>
-                        <input className="form-control" type="password" id="oldPassword" value={this.state.oldPassword} autoComplete="current-password"
-                               onChange={this.handleOldPasswordChange} />
-                    </div>
-                    <div className="form-group">
-                        <label>New Password:</label>
-                        <input className="form-control" type="password" id="newPassword" value={this.state.newPassword} autoComplete="new-password"
-                               onChange={this.handleNewPasswordChange} />
-                    </div>
-                    <input className="btn btn-outline-success col-2" type="submit" id="submit" value="Submit"/>
-                </form>
             </div>
         )
     }
