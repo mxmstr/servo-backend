@@ -39,6 +39,10 @@ And then to start the server, run:
 This will open a browser window with the Servo home page.
 
 ![alt text](https://github.com/mxmstr/servo-backend/blob/master/screenshots/login.PNG)
+![alt text](https://github.com/mxmstr/servo-backend/blob/master/screenshots/register.PNG)
+![alt text](https://github.com/mxmstr/servo-backend/blob/master/screenshots/menu.PNG)
+![alt text](https://github.com/mxmstr/servo-backend/blob/master/screenshots/tables.PNG)
+![alt text](https://github.com/mxmstr/servo-backend/blob/master/screenshots/tickets.PNG)
 
 # screenshots
 
