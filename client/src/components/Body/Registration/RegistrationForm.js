@@ -2,6 +2,7 @@ import React from 'react';
 import OktaAuth from '@okta/okta-auth-js';
 import { withAuth } from '@okta/okta-react';
 import { connect } from 'react-redux';
+import { Grid, Row, Col } from "react-bootstrap";
 
 import { registrationApiCall } from '../../../actions/Registration';
 import config from '../../../app.config';
@@ -62,29 +63,43 @@ class RegistrationForm extends React.Component{
             null;
 
         return(
-            <form className="form-horizontal col-sm-6"
-                style={ {margin: '0 auto', width:'80%'} }
-                onSubmit={this.handleSubmit}>
-                <h3 style={ {textAlign: 'center'} }>Registration</h3>
-                <br />
-                {errorMessage}
-                <div className="form-group">
-                    <label>Organization:</label>
-                    <input className="form-control" type="text" id="organization" value={this.state.organization}
-                           onChange={this.handleOrganizationChange} />
-                </div>
-                <div className="form-group">
-                    <label className="control-label">Email:</label>
-                    <input className="form-control" type="email" id="email" value={this.state.email}
-                           onChange={this.handleEmailChange}/>
-                </div>
-                <div className="form-group">
-                    <label>Password:</label>
-                    <input className="form-control" type="password" id="password" value={this.state.password}
-                           onChange={this.handlePasswordChange} />
-                </div>
-                <input className="btn btn-outline-success col-2" type="submit" id="submit" value="Register"/>
-            </form>
+            <div className="content">
+            <Grid style={ { height: '100vh' } }>
+                <Row className="show-grid">
+                    <Col xs={1} md={4} />
+                    <Col xs={4} md={4} >{
+
+                        <form className="form-vertical"
+                            onSubmit={this.handleSubmit}>
+
+                            <h3 style={ {textAlign: 'center'} }>Registration</h3>
+
+                            <br />
+                            {errorMessage}
+                            <div className="form-group">
+                                <label>Organization:</label>
+                                <input className="form-control" type="text" id="organization" value={this.state.organization}
+                                    onChange={this.handleOrganizationChange} />
+                            </div>
+                            <div className="form-group">
+                                <label className="control-label">Email:</label>
+                                <input className="form-control" type="email" id="email" value={this.state.email}
+                                    onChange={this.handleEmailChange}/>
+                            </div>
+                            <div className="form-group">
+                                <label>Password:</label>
+                                <input className="form-control" type="password" id="password" value={this.state.password}
+                                    onChange={this.handlePasswordChange} />
+                            </div>
+                            <input className="btn btn-outline-success col-2" type="submit" id="submit" value="Register"/>
+                        </form>
+                        
+                        }</Col>
+                    <Col xs={1} md={4} />
+                </Row>
+            </Grid>
+            </div>
+            
         );
     }
 

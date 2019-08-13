@@ -3,6 +3,7 @@ import { withAuth } from '@okta/okta-react';
 import {changePasswordApiCall} from "../../../actions/Profile";
 import {connect} from "react-redux";
 import Loading from "../Loading";
+import { Grid, Row, Col } from "react-bootstrap";
 
 
 class ProfilePage extends React.Component {
@@ -53,13 +54,19 @@ class ProfilePage extends React.Component {
 
 
         return (
-            <div>
-                <section className="user-profile">
-                    <h1>THIS IS YOUR PROFILE.</h1>
-                    <div>
-                        <label>Name: <span>{this.state.user.name}</span></label>
-                    </div>
-                </section>
+            <div className="content">
+            <Grid style={ { height: '100vh' } }>
+                <Row className="show-grid">
+                    <Col xs={8} md={8}>
+                        <h1>THIS IS YOUR PROFILE.</h1>
+                    </Col>
+                    <Col xs={8} md={8}>    
+                        <div>
+                            <label>Name: <span>{this.state.user.name}</span></label>
+                        </div>
+                    </Col>
+                </Row>
+            </Grid>
             </div>
         )
     }

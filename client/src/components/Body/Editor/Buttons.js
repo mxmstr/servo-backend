@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'reactstrap';
+import { Button } from 'react-bootstrap';
 import {connect} from "react-redux";
 import {fetchItemsApiCall, deleteItemApiCall} from "../../../actions/ItemList";
 import {clearItemApiCall, addItemApiCall, fetchItemApiCall, putItemApiCall, postItemApiCall} from "../../../actions/ItemEdit";

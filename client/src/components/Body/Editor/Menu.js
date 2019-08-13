@@ -25,9 +25,12 @@ class Menu extends React.Component {
     render() {
         if(!this.state.user) return null;
 
+        const cellStyle = {
+            'white-space' : 'nowrap',
+            'overflow' : 'hidden'
+        };
 
         return (
-            
             <div>
                 <ItemEdit uri="menu" editable={ ['name', 'price', 'options'] } />
                 <ItemList 
@@ -36,7 +39,9 @@ class Menu extends React.Component {
                     columns={ ['image', 'id', 'name', 'price', 'options'] }
                     editable={ ['name', 'price', 'options'] }
                     add={ true }
-                    actions={ [<Buttons.Edit/>, <Buttons.Delete/>] } />
+                    actions={ [<Buttons.Edit/>, <Buttons.Delete/>] }
+                    style={ {"padding": "30px"} }
+                    cellStyle={ cellStyle }/>
             </div>
         )
     }

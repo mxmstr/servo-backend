@@ -1,11 +1,13 @@
 import React from 'react';
-import { Button, ButtonGroup, Container, Table } from 'reactstrap';
+import { ButtonGroup, Grid, Row, Col, Table } from 'react-bootstrap';
 import { withAuth } from '@okta/okta-react';
 import {fetchItemsApiCall, deleteItemApiCall} from "../../../actions/ItemList";
 import {clearItemApiCall, addItemApiCall, fetchItemApiCall} from "../../../actions/ItemEdit";
 import {connect} from "react-redux";
 import Loading from "../Loading";
 import Buttons from "./Buttons";
+import Card from "../../../template/components/Card/Card.jsx";
+
 
 class ItemList extends React.Component {
     static defaultProps = {
@@ -14,7 +16,9 @@ class ItemList extends React.Component {
       filters: [],
       updateInterval: 0,
       add: false,
-      actions: []
+      actions: [],
+      style: {},
+      cellStyle: {}
     }
 
     constructor(props){
@@ -75,78 +79,83 @@ class ItemList extends React.Component {
 
 
       // Create the table header from columns attribute
-    	const columns = noItems ? [] : this.props.columns;
-    	const head = columns.map(key => {
+      const columns = noItems ? [] : this.props.columns;
+      const head = this.props.columns.map(key => {
         const keyUpper = key.charAt(0).toUpperCase() + key.slice(1);
-
-    		return <th>{ keyUpper }</th>
+        return <th>{ keyUpper }</th>
       });
-      
       head.push(<th>Actions</th>);
-      
 
-      // Create rows for each item, add action buttons
-    	const body = noItems ? [] : this.props.items.map(item => {
 
-            for (var field in this.props.filters) {
-              if (item[field] !== this.props.filters[field])
-                return null;
-            }
-
-            const cellStyle = {
-              'maxWidth': '50px',
-              'white-space' : 'nowrap',
-              'overflow' : 'hidden'
-            }
-
-    		    const values = this.props.columns.map(column => {
-    	      			return <td style={ cellStyle }>{ item[column] }</td>
-    	      		});
-
-    	      return <tr key={item.id}>
-    	      	{values}
-    	        <td>
-                <ButtonGroup>
-                { 
-                  this.props.actions.map(action => {
-                    return <action.type item={ item } uri={ this.props.uri } editable={ this.props.editable } user={ this.state.user } />;
-                  })
-                }
-	    	        </ButtonGroup>
-	    	      </td>
-	    	    </tr>
-    	    });
+      // Optional add item button
+      const add = this.props.add ?
+        <div>
+          <Buttons.Add uri={ this.props.uri } editable={ this.props.editable } user={ this.state.user } />
+        </div>
+        : null;
         
+      const title = <Grid fluid><Row><Col md={2}>{this.props.title}</Col> <Col className="pull-right">{add}</Col></Row></Grid>
+
+      
+      // Create rows for each item, add action buttons
+      const body = noItems ? [] : this.props.items.map((item, key) => {
+
+        for (var field in this.props.filters) {
+          if (item[field] !== this.props.filters[field])
+            return null;
+        }
+
+        const values = this.props.columns.map(column => item[column]);
+
         return (
-        		<Container fluid>
-              
-              { 
-                // Optional add item button
-                this.props.add ?
-                <div className="float-right">
-                  <Buttons.Add uri={ this.props.uri } editable={ this.props.editable } user={ this.state.user } />
-                </div>
-                : null
+          <tr key={key}>
+            {
+              values.map((prop, key) => {
+                return <td key={key} style={ this.props.cellStyle }>{prop}</td>;
+              })
+            }
+            <td style={ {} }>
+              <ButtonGroup>
+              {
+                this.props.actions.map(action => {
+                  return <action.type item={ item } uri={ this.props.uri } editable={ this.props.editable } user={ this.state.user } />;
+                })
               }
+              </ButtonGroup>
+            </td>
+          </tr>
+        );
 
-              <h3>{ this.props.title }</h3>
-              { noItems ? 
-                <h6>There are no items to display...</h6> : 
-                <Table className="mt-4">
-                  <thead>
-                  <tr>
-                  {head}
-                  </tr>
-                  </thead>
-                  <tbody>
-                  {body}
-                  </tbody>
-                </Table> 
-              }
-              
+      })
 
-            </Container>
-        )
+
+      const items = noItems ? [] : this.props.items
+
+      return (
+        <div className="content" style={ this.props.style }>
+          <Grid fluid>
+            <Row>
+              <Col md={12}>
+                <Card
+                  title={ title }
+                  ctTableFullWidth
+                  ctTableResponsive
+                  content={
+                    <Table striped hover>
+                      <thead>
+                        <tr> { head } </tr>
+                      </thead>
+                      <tbody>
+                        { body }
+                      </tbody>
+                    </Table>
+                  }
+                />
+              </Col>
+            </Row>
+          </Grid>
+        </div>
+      );
     }
 };
 

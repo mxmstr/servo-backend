@@ -1,13 +1,25 @@
-import React from 'react';
+import React from "react";
+import { Grid } from "react-bootstrap";
 
-const footer = (props) => {
+class Footer extends React.Component {
+  render() {
     return (
-        <footer className="py-2 bg-dark">
-          <div className="container">
-          <p className="m-0 text-center text-white">Copyright &copy; Eric Lynch 2019</p>
-          </div>
-        </footer>
-    )
+      <footer className="footer">
+        <Grid fluid>
+          <nav className="pull-left">
+            <ul>
+              <li>
+                <a href="https://github.com/mxmstr/servo-backend">Source</a>
+              </li>
+            </ul>
+          </nav>
+          <p className="copyright pull-right">
+            &copy; {new Date().getFullYear()}{" "} Eric Lynch
+          </p>
+        </Grid>
+      </footer>
+    );
+  }
 }
 
-export default footer;
+export default Footer;

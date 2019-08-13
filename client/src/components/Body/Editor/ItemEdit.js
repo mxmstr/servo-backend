@@ -1,13 +1,17 @@
 import React from 'react';
 import Popup from "reactjs-popup";
-import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
-import { Grid } from '@material-ui/core';
+import { Button, Grid, Row, Col, Form, FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
+import Card from "../../../template/components/Card/Card.jsx";
+import { FormInputs } from "../../../template/components/FormInputs/FormInputs.jsx";
+//import { Grid } from '@material-ui/core';
 import { withAuth } from '@okta/okta-react';
 import {fetchItemsApiCall} from "../../../actions/ItemList";
 import {clearItemApiCall, fetchItemApiCall, putItemApiCall, postItemApiCall} from "../../../actions/ItemEdit";
 import {connect} from "react-redux";
 
+
 class ItemEdit extends React.Component {
+
     static defaultProps = {
         editable: []
     }
@@ -60,24 +64,22 @@ class ItemEdit extends React.Component {
             return null;
         }
 
-        const popupStyle = { flex: 1, 'overflow-y': 'scroll' };
 
         const title = <h2>{ this.props.create ? 'Add New Item' : 'Edit Item' }</h2>;
 
         // Show all item's fields, disable fields if they're not editable
         const fields = Object.keys(this.props.item).map(key => {
 
-                const keyUpper = key.charAt(0).toUpperCase() + key.slice(1);
+            const keyUpper = key.charAt(0).toUpperCase() + key.slice(1);
 
-                return <Grid item xs={0}>
-                    <FormGroup>
-                        <Label for={ key }>{ keyUpper }</Label>
-                        <Input type="text" name={ key } id={ key } defaultValue={ this.props.item[key] || '' }
-                            onChange={ this.handleChange } autoComplete={ key } 
-                            disabled={ !this.props.editable.includes(key) } />
-                    </FormGroup>
-                </Grid>
-            });
+            return <FormGroup className="col-md-6">
+                    <ControlLabel for={ key }>{ keyUpper }</ControlLabel>
+                    <FormControl type="text" name={ key } id={ key } defaultValue={ this.props.item[key] || '' }
+                        onChange={ this.handleChange } autoComplete={ key } 
+                        disabled={ !this.props.editable.includes(key) } />
+                </FormGroup>
+        });
+
 
         return (
             <Popup
@@ -88,24 +90,19 @@ class ItemEdit extends React.Component {
                 defaultOpen={ true }
             >
                 <span> 
-                <Container fluid>
-
+                <Grid fluid>
                     { title }
-
                     <Form onSubmit={ this.handleSubmit }>
-                        <Grid container spacing={1}>
                             { fields }
-                        </Grid>
-                    <FormGroup>
-                        <Button color="primary" type="submit">Save</Button>{' '}
-                        <Button color="secondary" onClick={ this.props.clearItemApiCall }>Cancel</Button>
-                    </FormGroup>
+                        <FormGroup className="col-md-10">
+                            <Button color="primary" type="submit">Save</Button>{' '}
+                            <Button color="secondary" onClick={ this.props.clearItemApiCall }>Cancel</Button>
+                        </FormGroup>
                     </Form>
-
-                </Container>
+                </Grid>
                 </span>
             </Popup>
-        )
+          );
         
     }
 };

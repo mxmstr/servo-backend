@@ -2,6 +2,7 @@ import React from 'react';
 import OktaAuth from '@okta/okta-auth-js';
 import {withAuth} from '@okta/okta-react';
 import { connect } from 'react-redux';
+import { Grid, Row, Col } from "react-bootstrap";
 
 import { loginApiCall } from '../../../actions/Login';
 
@@ -45,32 +46,44 @@ class LoginForm extends React.Component {
             null;
 
         return (
-            <form className="form-vertical col-sm-6" 
-                style={ {margin: '0 auto', width:'80%'} } 
-                onSubmit={ this.handleSubmit }>
-                <h3 style={ {textAlign: 'center'} }>Welcome to Servo</h3>
-                <br />
-                {errorMessage}
-                <div className="form-group">
-                    <label className="control-label">Email:</label>
-                    <input
-                        className="form-control"
-                        id="username" type="text"
-                        value={this.state.username}
-                        onChange={this.handleUsernameChange}/>
-                </div>
+            <div className="content">
+            <Grid style={ { height: '100vh' } }>
+                <Row className="show-grid">
+                    <Col xs={1} md={4} />
+                    <Col xs={4} md={4} >{
 
-                <div className="form-group">
-                    <label className="control-label">Password:</label>
-                    <input
-                        className="form-control"
-                        id="password" type="password"
-                        value={this.state.password}
-                        onChange={this.handlePasswordChange}/>
-                </div>
-                <input className="btn btn-outline-success col-2" id="submit" type="submit" value="Submit"/>
-            </form>
+                        <form className="form-vertical"
+                            onSubmit={ this.handleSubmit }>
 
+                            <h3 style={ {textAlign: 'center'} }>Welcome to Servo</h3>
+
+                            <br />
+                            {errorMessage}
+                            <div className="form-group">
+                                <label className="control-label">Email:</label>
+                                <input
+                                    className="form-control"
+                                    id="username" type="text"
+                                    value={this.state.username}
+                                    onChange={this.handleUsernameChange}/>
+                            </div>
+
+                            <div className="form-group">
+                                <label className="control-label">Password:</label>
+                                <input
+                                    className="form-control"
+                                    id="password" type="password"
+                                    value={this.state.password}
+                                    onChange={this.handlePasswordChange}/>
+                            </div>
+                            <input className="btn btn-outline-success col-2 " id="submit" type="submit" value="Submit"/>
+                        </form>
+                        
+                        }</Col>
+                    <Col xs={1} md={4} />
+                </Row>
+            </Grid>
+            </div>
         );
     }
 };
@@ -93,5 +106,3 @@ export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(withAuth(LoginForm));
-
-// export default withAuth(LoginForm);

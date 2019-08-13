@@ -55,8 +55,13 @@ class Tickets extends React.Component {
             },
           }));
 
-        return (
+        const cellStyle = {
+            'maxWidth': '50px',
+            'white-space' : 'nowrap',
+            'overflow' : 'hidden'
+        };
 
+        return (
             <div className={classes.root}>
 
                 <ItemEdit uri="ticket" />
@@ -69,7 +74,9 @@ class Tickets extends React.Component {
                             uri="ticket"
                             columns={ ['id', 'timestamp'] }
                             actions={ [<Buttons.Edit/>, <Buttons.Complete/>, <Buttons.Incomplete/>] }
-                            filters={ { status: 'OPEN' } } />
+                            filters={ { status: 'OPEN' } } 
+                            style={ {"padding-top": "30px"} }
+                            cellStyle={ cellStyle }/>
                     </Grid>
                     <Grid item xs={4}>
                         <ItemList 
@@ -77,7 +84,9 @@ class Tickets extends React.Component {
                             uri="ticket"
                             columns={ ['id', 'timestamp'] }
                             actions={ [<Buttons.Edit/>, <Buttons.Open/>, <Buttons.Incomplete/>] }
-                            filters={ { status: 'COMPLETE' } } />
+                            filters={ { status: 'COMPLETE' } } 
+                            style={ {"padding-top": "30px"} }
+                            cellStyle={ cellStyle }/>
                     </Grid>
                     <Grid item xs={4}>
                         <ItemList 
@@ -85,7 +94,9 @@ class Tickets extends React.Component {
                             uri="ticket"
                             columns={ ['id', 'timestamp'] }
                             actions={ [<Buttons.Edit/>, <Buttons.Open/>, <Buttons.Complete/>] }
-                            filters={ { status: 'INCOMPLETE' } } />
+                            filters={ { status: 'INCOMPLETE' } } 
+                            style={ {"padding-top": "30px"} }
+                            cellStyle={ cellStyle }/>
                     </Grid>
                 </Grid>
             </div>

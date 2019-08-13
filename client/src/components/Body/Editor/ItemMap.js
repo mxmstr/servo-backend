@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, ButtonGroup, Container, Table } from 'reactstrap';
+import { Button, ButtonGroup, Container, Table } from 'react-bootstrap';
 import { withAuth } from '@okta/okta-react';
 import {fetchItemsApiCall, deleteItemApiCall} from "../../../actions/ItemList";
 import {clearItemApiCall, addItemApiCall, fetchItemApiCall} from "../../../actions/ItemEdit";

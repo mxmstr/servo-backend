@@ -1,13 +1,32 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Nav, Navbar, NavItem } from "react-bootstrap";
 import { withAuth } from '@okta/okta-react';
 
 class Header extends React.Component {
+
     constructor(props) {
         super(props);
-        this.state = { authenticated: null };
+        this.mobileSidebarToggle = this.mobileSidebarToggle.bind(this);
+        this.state = { authenticated: null, sidebarExists: false };
         this.checkAuthentication = this.checkAuthentication.bind(this);
         this.checkAuthentication();
+    }
+
+    mobileSidebarToggle(e) {
+        if (this.state.sidebarExists === false) {
+            this.setState({
+            sidebarExists: true
+            });
+        }
+        e.preventDefault();
+        document.documentElement.classList.toggle("nav-open");
+        var node = document.createElement("div");
+        node.id = "bodyClick";
+        node.onclick = function() {
+            this.parentElement.removeChild(this);
+            document.documentElement.classList.toggle("nav-open");
+        };
+        document.body.appendChild(node);
     }
 
     async checkAuthentication() {
@@ -26,45 +45,43 @@ class Header extends React.Component {
         if (this.state.authenticated === null) return null;
 
         let navAuth = (
-            <div className="collapse navbar-collapse" id="navbarResponsive">
-                <ul className="navbar-nav ml-auto">
-                    <li className="nav-item">
-                        {/*<Link className="nav-link" onClick={this.props.auth.logout}>Logout</Link>*/}
-                        <a className="nav-link" href="javascript:void(0)" onClick={this.props.auth.logout}>Logout</a>
-                    </li>
-                </ul>
-            </div>
-            );
+            <Nav pullRight>
+                <NavItem eventKey={3} href="javascript:void(0)" onClick={this.props.auth.logout}>
+                    Logout
+                </NavItem>
+            </Nav>
+        );
 
-    let navNotAuth = (
-        <div className="collapse navbar-collapse" id="navbarResponsive">
-            <ul className="navbar-nav ml-auto">
-                <li className = "nav-item" >
-                    <Link className = "nav-link" to="/register" >Register</Link>
-                </li >
-            </ul>
-        </div>
-    );
+        let navNotAuth = (
+            <Nav pullRight>
+                <NavItem eventKey={3} href="/">
+                    Log in
+                </NavItem>
+                <NavItem eventKey={3} href="/register">
+                    Register
+                </NavItem>
+            </Nav>
+        );
 
         const authNav = this.state.authenticated ? navAuth : navNotAuth;
 
 
         return (
-            /* Navigation */
-            <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-                <div className="container-fluid">
-                    <a className="navbar-brand" href="#">Servo</a>
-                    <button className="navbar-toggler" type="button" data-toggle="collapse"
-                            data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
-                            aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
-                    {authNav}
-                </div>
-            </nav>
-        )
+            <Navbar fluid>
+            <Navbar.Header>
+                <Navbar.Brand>
+                    <p>{ this.state.authenticated ? "Dashboard" : "Servo" }</p>
+                </Navbar.Brand>
+                <Navbar.Toggle onClick={this.mobileSidebarToggle} />
+            </Navbar.Header>
+            <Navbar.Collapse>
+                { authNav }
+            </Navbar.Collapse>
+            </Navbar>
+        );
+
     }
 
-};
+}
 
 export default withAuth(Header);

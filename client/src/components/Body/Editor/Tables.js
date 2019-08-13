@@ -1,6 +1,5 @@
 import React from 'react';
 import { withAuth } from '@okta/okta-react';
-import ItemMap from "./ItemMap";
 import ItemEdit from "./ItemEdit";
 import ItemList from "./ItemList";
 import Buttons from "./Buttons";
@@ -26,6 +25,10 @@ class Tables extends React.Component {
     render() {
         if(!this.state.user) return null;
 
+        const cellStyle = {
+            'white-space' : 'nowrap',
+            'overflow' : 'hidden'
+        };
 
         return (
             
@@ -36,7 +39,9 @@ class Tables extends React.Component {
                     uri="table"
                     columns={ ['id', 'businessId', 'customerId'] }
                     add={ true }
-                    actions={ [<Buttons.Edit/>, <Buttons.Delete/>] } />
+                    actions={ [<Buttons.Edit/>, <Buttons.Delete/>] }
+                    style={ {"padding": "30px"} }
+                    cellStyle={ cellStyle } />
             </div>
         )
     }
