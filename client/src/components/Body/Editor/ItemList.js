@@ -94,7 +94,7 @@ class ItemList extends React.Component {
         </div>
         : null;
         
-      const title = <Grid fluid><Row><Col md={2}>{this.props.title}</Col> <Col className="pull-right">{add}</Col></Row></Grid>
+      const title = <Grid fluid><Row><Col md={4}>{this.props.title}</Col> <Col className="pull-right">{add}</Col></Row></Grid>
 
       
       // Create rows for each item, add action buttons
