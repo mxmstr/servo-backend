@@ -10,6 +10,8 @@ https://www.heidisql.com/download.php
 
 And create a new database called "servo" running on port 3306 with the same root credentials specified in `application.yml` 
 
+Run Queries.sql to load sample data into the database.
+
 ### Backend
 
 To start the Spring Boot server, first install Maven (install JDK 8 instead of JDK 10):
@@ -37,6 +39,8 @@ And then to start the server, run:
 `npm run start`
 
 This will open a browser window with the Servo home page.
+
+Sample credentials: business@email.com | aaaAAA1!
 
 ### Mobile
 

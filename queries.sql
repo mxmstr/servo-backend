@@ -2,6 +2,10 @@ INSERT INTO business
 	(id, address, images, is_opened, name)
 	VALUES ('00uoudimbcBaMgXYj356', 'address', NULL, 0, 'name');
 
+INSERT INTO business
+	(id, address, images, is_opened, name)
+	VALUES ('00u147czsbl3ous2u357', 'address', NULL, 0, 'name');
+
 INSERT INTO customer
 	(id, name)
 	VALUES ('00uyza6nwAy2X8Tmr356', 'Joe Smith');
