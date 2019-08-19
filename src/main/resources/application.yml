@@ -1,3 +1,10 @@
+okta:
+  oauth2:
+    clientId: 0oap0ze7tuZcw1B5Z356
+    clientSecret: 9nGCV0VCsqTctnocYNiFMAdBab-rNF91Y88aX3se
+    issuer: https://dev-486832.okta.com/oauth2/default
+    rolesClaim: groups
+    scope: openid
 spring:
   profiles:
     active: spring.profiles.active

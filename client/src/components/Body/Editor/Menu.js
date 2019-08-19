@@ -26,7 +26,7 @@ class Menu extends React.Component {
         if(!this.state.user) return null;
 
         const cellStyle = {
-            'white-space' : 'nowrap',
+            'whiteSpace' : 'nowrap',
             'overflow' : 'hidden'
         };
 

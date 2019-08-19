@@ -7,16 +7,16 @@ export const updateItemList = (data) => ({
 });
 
 export const deleteItemApiCall = (data) => {
-    return dispatch => {
+    return async dispatch => {
+
+		const sessionId = await data.auth.getAccessToken();
 
 		return fetch(`/api/${data.uri}/${data.id}`, {
 				method: 'DELETE',
 				headers: {
 					'UserId': data.user.sub,
-					'Accept': 'application/json',
-					'Content-Type': 'application/json'
-				},
-				credentials: 'include'
+					'Authorization': 'Bearer ' + sessionId
+				}
 			})
 		.then(response => response.json())
 			.then(data => {
@@ -29,16 +29,16 @@ export const deleteItemApiCall = (data) => {
 };
 
 export const fetchItemsApiCall = (data) => {
-    return dispatch => {
-		// data.user
+    return async dispatch => {
+
+		const sessionId = await data.auth.getAccessToken();
+
     	return fetch(`/api/${data.uri}`, {
     	      method: 'GET',
     	      headers: {
 				'UserId': data.user.sub,
-    	        'Accept': 'application/json',
-    	        'Content-Type': 'application/json'
+				'Authorization': 'Bearer ' + sessionId
     	      },
-    	      credentials: 'include'
     	    })
     	.then(response => response.json())
 		.then(data => {

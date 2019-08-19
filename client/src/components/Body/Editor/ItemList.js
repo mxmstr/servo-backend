@@ -1,5 +1,7 @@
 import React from 'react';
+import config from '../../../app.config';
 import { ButtonGroup, Grid, Row, Col, Table } from 'react-bootstrap';
+import OktaAuth from '@okta/okta-auth-js';
 import { withAuth } from '@okta/okta-react';
 import {fetchItemsApiCall, deleteItemApiCall} from "../../../actions/ItemList";
 import {clearItemApiCall, addItemApiCall, fetchItemApiCall} from "../../../actions/ItemEdit";
@@ -38,7 +40,7 @@ class ItemList extends React.Component {
         	.then(user => {
         		this.setState({user});
             
-        		var data = {uri: this.props.uri, user: user};
+        		var data = {uri: this.props.uri, user: user, auth: this.props.auth};
 		        this.props.fetchItemsApiCall(data);
         	});
         	
@@ -52,27 +54,27 @@ class ItemList extends React.Component {
     async addItem() {
         await this.props.clearItemApiCall();
 
-        var data = {fields: this.props.editable};
+        var data = {fields: this.props.editable, auth: this.props.auth};
         this.props.addItemApiCall(data);
     }
 
     async editItem(id) {
         await this.props.clearItemApiCall();
 
-        var data = {uri: this.props.uri, user: this.state.user, id: id};
+        var data = {uri: this.props.uri, user: this.state.user, auth: this.props.auth, id: id};
         this.props.fetchItemApiCall(data);
     }
 
     async removeItem(id) {
       await this.props.clearItemApiCall();
 
-      var data = {uri: this.props.uri, user: this.state.user, id: id};
+      var data = {uri: this.props.uri, user: this.state.user, auth: this.props.auth, id: id};
       await this.props.deleteItemApiCall(data);
       this.props.fetchItemsApiCall(data);
 	  }
 
     render() {
-    	
+
     	if (!this.state.mounted || !this.state.user) return <Loading/>;
       
       const noItems = this.props.items.length === 0;
@@ -90,7 +92,7 @@ class ItemList extends React.Component {
       // Optional add item button
       const add = this.props.add ?
         <div>
-          <Buttons.Add uri={ this.props.uri } editable={ this.props.editable } user={ this.state.user } />
+          <Buttons.Add uri={ this.props.uri } editable={ this.props.editable } user={ this.state.user } auth={ this.props.auth } />
         </div>
         : null;
         
@@ -118,7 +120,7 @@ class ItemList extends React.Component {
               <ButtonGroup>
               {
                 this.props.actions.map(action => {
-                  return <action.type item={ item } uri={ this.props.uri } editable={ this.props.editable } user={ this.state.user } />;
+                  return <action.type item={ item } uri={ this.props.uri } editable={ this.props.editable } user={ this.state.user } auth={ this.props.auth } />;
                 })
               }
               </ButtonGroup>
@@ -143,7 +145,7 @@ class ItemList extends React.Component {
                   content={
                     <Table striped hover>
                       <thead>
-                        <tr> { head } </tr>
+                        <tr>{ head }</tr>
                       </thead>
                       <tbody>
                         { body }

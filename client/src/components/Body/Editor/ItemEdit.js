@@ -46,7 +46,7 @@ class ItemEdit extends React.Component {
 
         // If creating, use the state item. If editing, merge the state item with the original item
         const item = this.props.create ? this.state.item : Object.assign(this.props.item, this.state.item);
-        var data = { uri: this.props.uri, user: this.state.user, item: item };
+        var data = { uri: this.props.uri, user: this.state.user, auth: this.props.auth, item: item };
 
         // If creating, do a post api call instead of a put
         this.props.create ? await this.props.postItemApiCall(data) : await this.props.putItemApiCall(data);
@@ -73,7 +73,7 @@ class ItemEdit extends React.Component {
             const keyUpper = key.charAt(0).toUpperCase() + key.slice(1);
 
             return <FormGroup className="col-md-6">
-                    <ControlLabel for={ key }>{ keyUpper }</ControlLabel>
+                    <ControlLabel htmlFor={ key }>{ keyUpper }</ControlLabel>
                     <FormControl type="text" name={ key } id={ key } defaultValue={ this.props.item[key] || '' }
                         onChange={ this.handleChange } autoComplete={ key } 
                         disabled={ !this.props.editable.includes(key) } />

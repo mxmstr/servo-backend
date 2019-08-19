@@ -33,7 +33,7 @@ const Add = connect(mapStateToProps, mapDispatchToProps)(class Add extends React
     async onClick() {
         await this.props.clearItemApiCall();
 
-        var data = {fields: this.props.editable};
+        var data = {auth: this.props.auth, fields: this.props.editable};
         this.props.addItemApiCall(data);
     }
 
@@ -58,7 +58,7 @@ const Edit = connect(mapStateToProps, mapDispatchToProps)(class Edit extends Rea
     async onClick() {
         await this.props.clearItemApiCall();
 
-        var data = {uri: this.props.uri, user: this.props.user, id: this.props.item.id};
+        var data = {uri: this.props.uri, user: this.props.user, auth: this.props.auth, id: this.props.item.id};
         this.props.fetchItemApiCall(data);
     }
 
@@ -83,7 +83,7 @@ const Delete = connect(mapStateToProps, mapDispatchToProps)(class Delete extends
     async onClick() {
         await this.props.clearItemApiCall();
 
-        var data = {uri: this.props.uri, user: this.props.user, id: this.props.item.id};
+        var data = {uri: this.props.uri, user: this.props.user, auth: this.props.auth, id: this.props.item.id};
         await this.props.deleteItemApiCall(data);
         this.props.fetchItemsApiCall(data);
     }
@@ -107,7 +107,7 @@ const Open = connect(mapStateToProps, mapDispatchToProps)(class Open extends Rea
     }
 
     async onClick() {
-        var data = { uri: this.props.uri, user: this.props.user, item: this.props.item };
+        var data = { uri: this.props.uri, user: this.props.user, auth: this.props.auth, item: this.props.item };
         data.item.status = 'OPEN'
 
         await this.props.putItemApiCall(data);
@@ -133,7 +133,7 @@ const Complete = connect(mapStateToProps, mapDispatchToProps)(class Complete ext
     }
 
     async onClick() {
-        var data = { uri: this.props.uri, user: this.props.user, item: this.props.item };
+        var data = { uri: this.props.uri, user: this.props.user, auth: this.props.auth, item: this.props.item };
         data.item.status = 'COMPLETE'
 
         await this.props.putItemApiCall(data);
@@ -159,7 +159,7 @@ const Incomplete = connect(mapStateToProps, mapDispatchToProps)(class Incomplete
     }
 
     async onClick() {
-        var data = { uri: this.props.uri, user: this.props.user, item: this.props.item };
+        var data = { uri: this.props.uri, user: this.props.user, auth: this.props.auth, item: this.props.item };
         data.item.status = 'INCOMPLETE'
 
         await this.props.putItemApiCall(data);

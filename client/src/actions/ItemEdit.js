@@ -23,16 +23,16 @@ export const addItemApiCall = (data) => {
 };
 
 export const fetchItemApiCall = (data) => {
-    return dispatch => {
+    return async dispatch => {
+
+		const sessionId = await data.auth.getAccessToken();
 
     	return fetch(`/api/${data.uri}/${data.id}`, {
     	      method: 'GET',
     	      headers: {
 				'UserId': data.user.sub,
-    	        'Accept': 'application/json',
-    	        'Content-Type': 'application/json'
-    	      },
-    	      credentials: 'include'
+				'Authorization': 'Bearer ' + sessionId
+    	      }
     	    })
     	.then(response => response.json())
 	      .then(data => {
@@ -46,14 +46,17 @@ export const fetchItemApiCall = (data) => {
 };
 
 export const putItemApiCall = (data) => {
-    return dispatch => {
+    return async dispatch => {
+
+		const sessionId = await data.auth.getAccessToken();
 
     	return fetch(`/api/${data.uri}/${data.item.id}`, {
     	      method: 'PUT',
     	      headers: {
 				'UserId': data.user.sub,
     	        'Accept': 'application/json',
-    	        'Content-Type': 'application/json'
+    	        'Content-Type': 'application/json',
+				'Authorization': 'Bearer ' + sessionId
 			  },
 			  body: JSON.stringify(data.item),
     	      credentials: 'include'
@@ -70,14 +73,17 @@ export const putItemApiCall = (data) => {
 };
 
 export const postItemApiCall = (data) => {
-    return dispatch => {
+    return async dispatch => {
+
+		const sessionId = await data.auth.getAccessToken();
 
     	return fetch(`/api/${data.uri}`, {
     	      method: 'POST',
     	      headers: {
 				'UserId': data.user.sub,
     	        'Accept': 'application/json',
-    	        'Content-Type': 'application/json'
+    	        'Content-Type': 'application/json',
+				'Authorization': 'Bearer ' + sessionId
 			  },
 			  body: JSON.stringify(data.item),
     	      credentials: 'include'

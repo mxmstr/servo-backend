@@ -9,6 +9,7 @@ class Header extends React.Component {
         this.mobileSidebarToggle = this.mobileSidebarToggle.bind(this);
         this.state = { authenticated: null, sidebarExists: false };
         this.checkAuthentication = this.checkAuthentication.bind(this);
+        this.logout = this.logout.bind(this);
         this.checkAuthentication();
     }
 
@@ -36,6 +37,13 @@ class Header extends React.Component {
         }
     }
 
+    async logout() {
+
+        //const sessionId = await this.props.auth.getAccessToken();
+        this.props.auth.logout();
+
+    }
+
     componentDidUpdate() {
         this.checkAuthentication();
     }
@@ -46,7 +54,7 @@ class Header extends React.Component {
 
         let navAuth = (
             <Nav pullRight>
-                <NavItem eventKey={3} href="javascript:void(0)" onClick={this.props.auth.logout}>
+                <NavItem eventKey={3} href="javascript:void(0)" onClick={this.logout}>
                     Logout
                 </NavItem>
             </Nav>

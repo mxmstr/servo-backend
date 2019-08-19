@@ -7,10 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,6 +35,7 @@ import com.platform.lynch.servo.model.CustomerRepository;
 import lombok.Value;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import java.net.URI;
@@ -47,6 +50,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = "*")
 public class UserController {
 	
 	@Autowired
@@ -149,17 +153,4 @@ public class UserController {
         
     }
     
-//    @PostMapping("/logout")
-//    public ResponseEntity<?> logout(HttpServletRequest request,
-//                                    @AuthenticationPrincipal(expression = "idToken") OidcIdToken idToken) {
-//        // send logout URL to client so they can initiate logout
-//        String logoutUrl = this.registration.getProviderDetails()
-//                .getConfigurationMetadata().get("end_session_endpoint").toString();
-//
-//        Map<String, String> logoutDetails = new HashMap<>();
-//        logoutDetails.put("logoutUrl", logoutUrl);
-//        logoutDetails.put("idToken", idToken.getTokenValue());
-//        request.getSession(false).invalidate();
-//        return ResponseEntity.ok().body(logoutDetails);
-//    }
 }

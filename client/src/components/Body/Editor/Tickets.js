@@ -28,7 +28,7 @@ class Tickets extends React.Component {
                 this.setState({user});
 
                 this.intervalID = setInterval(() => {
-                    this.props.fetchItemsApiCall({uri: 'ticket', user: user});
+                    this.props.fetchItemsApiCall({uri: 'ticket', user: user, auth: this.props.auth});
                 }, 5000);
             });
     }
@@ -57,7 +57,7 @@ class Tickets extends React.Component {
 
         const cellStyle = {
             'maxWidth': '50px',
-            'white-space' : 'nowrap',
+            'whiteSpace' : 'nowrap',
             'overflow' : 'hidden'
         };
 
