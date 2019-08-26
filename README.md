@@ -6,7 +6,7 @@ One of the biggest challenges was implementing oAuth2 security and connecting it
 
 Scalability was also an issue when it came to the front end. There was a wide range of data which needed to be editable for business users, and only so much time to customize views for each table. I took advantage of React's component-based architecture to create a modular ItemList element which could be reused for almost all of the views and could be configured to edit a table in a variety of ways. This made it much easier to limit what data could be visible and editable to users.
 
-Hosted on AWS: http://ec2-18-223-185-220.us-east-2.compute.amazonaws.com:3000
+Hosted on AWS: http://18.223.185.220:3000/
 
 Sample credentials: business@email.com | aaaAAA1!
 
